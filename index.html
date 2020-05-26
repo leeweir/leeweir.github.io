@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="嗜好太多，能力太小">
+  <meta name="author" content="LeeWeir">
+  <meta name="keywords" content="">
+  <title>Weir&#39;s Note</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+
+<body>
+  <header style="height: 100vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Weir's Note</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/home.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+          </div>
+
+          
+            <div class="scroll-down-bar">
+              <i class="iconfont icon-arrowdown"></i>
+            </div>
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      <div class="container nopadding-md">
+        <div class="py-5" id="board"
+          style=margin-top:0>
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2020/05/25/%E4%BA%91%E5%8E%9F%E7%94%9F%E4%BA%A4%E4%BB%98%E6%80%9D%E8%80%83/">云原生交付思考</a>
+
+      <a href="/2020/05/25/%E4%BA%91%E5%8E%9F%E7%94%9F%E4%BA%A4%E4%BB%98%E6%80%9D%E8%80%83/" class="index-excerpt">
+        
+        
+          
+        
+        <div></div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-05-25
+          </div>
+        
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2020/05/13/%E5%85%B3%E4%BA%8E%E7%BD%91%E5%8D%A1%E4%B8%AD%E6%96%AD%E4%B8%8D%E5%9D%87%E8%A1%A1%E9%97%AE%E9%A2%98%E5%8F%8A%E5%85%B6%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">关于网卡中断不均衡问题及其解决方案</a>
+
+      <a href="/2020/05/13/%E5%85%B3%E4%BA%8E%E7%BD%91%E5%8D%A1%E4%B8%AD%E6%96%AD%E4%B8%8D%E5%9D%87%E8%A1%A1%E9%97%AE%E9%A2%98%E5%8F%8A%E5%85%B6%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="index-excerpt">
+        
+        
+          
+        
+        <div>前不久生产碰到一个故障，一台宿主机上出现了大量的丢包，对业务造成了比较大的影响，遇到的问题还是蛮值得记录下来，所以简单的整理了下。
+我们先了解几个概念：
+什么是中断CPU 工作的模式有两种，一种是中断，由各种设备发起；一种是轮询，由 CPU 主动发起。
+我们主要看下中断。
+中断又分为两种：一种硬中断；一种软中断。硬中断是由硬件产生的，比如，像磁盘，网卡，键盘；软中断是由当前正在运行的进程所产生的。</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-05-13
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/sre/">sre</a>
+            
+              <a href="/tags/linux/">linux</a>
+            
+              <a href="/tags/network/">network</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2020/03/06/%E8%AF%91-A-deep-dive-into-Kubernetes-controllers/">(译) A deep dive into Kubernetes controllers</a>
+
+      <a href="/2020/03/06/%E8%AF%91-A-deep-dive-into-Kubernetes-controllers/" class="index-excerpt">
+        
+        
+          
+        
+        <div>
+原文地址
+
+Kubernetes 运行一组控制器，它们负责处理日常任务，以确保集群的期望状态与观察到的状态一致。例如，Replica Sets 维护在集群中运行的正确数量的 pods。Node Controller 查找服务器的状态，并在服务器宕机时做出响应。基本上，每个控制器负责 Kubernetes 世界中的特定资源。对于用户管理他们的集群，用户理解 Kubernetes 中每个控制器的角色</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-03-06
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/cloud-native/">cloud-native</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2019/10/28/Linux-%E4%B8%A2%E5%8C%85%E9%82%A3%E4%BA%9B%E4%BA%8B/">Linux 丢包那些事</a>
+
+      <a href="/2019/10/28/Linux-%E4%B8%A2%E5%8C%85%E9%82%A3%E4%BA%9B%E4%BA%8B/" class="index-excerpt">
+        
+        
+          
+        
+        <div>背景最近一直在排查一些网络的问题，比如 connect timeout 、read timeout 以及一些丢包的问题，刚好想整理一些东西，方便和团队内及开发分享。
+我们先看下 Linux 系统接收数据包的过程：
+
+
+
+网卡收到数据包。
+将数据包从网卡硬件缓存转移到服务器内存中。
+通知内核处理。
+经过 TCP/IP 协议逐层处理。
+应用程序通过 read() 从 socket buffer 读取数</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-10-28
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/sre/">sre</a>
+            
+              <a href="/tags/tcp/">tcp</a>
+            
+              <a href="/tags/linux/">linux</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2019/10/25/%E8%AF%91-Linux-bcc-eBPF-tcpdrop/">(译) Linux bcc/eBPF tcpdrop</a>
+
+      <a href="/2019/10/25/%E8%AF%91-Linux-bcc-eBPF-tcpdrop/" class="index-excerpt">
+        
+        
+          
+        
+        <div>
+最近在看eBPF的一些材料，看到Brendan Gregg的博客，后面想陆续针对一些主题翻译下，这一篇主要自介绍 tcpdrop，文章比较短，原文地址
+
+在调试基于内核的 TCP 数据包丢弃的生产问题时，我记得在Linux 4.7中 Eric Dumazet（Google) 添加了一个名为 tcp_drop() 的新功能，我可以使用 kprobes 和 bcc/eBPF 进行跟踪。
+这需要获得了</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-10-25
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/sre/">sre</a>
+            
+              <a href="/tags/tcp/">tcp</a>
+            
+              <a href="/tags/kernel/">kernel</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2019/10/21/%E4%B8%80%E4%B8%AA-Connect-Timeout-%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/">一个 Connect Timeout 故障排查</a>
+
+      <a href="/2019/10/21/%E4%B8%80%E4%B8%AA-Connect-Timeout-%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" class="index-excerpt">
+        
+        
+          
+        
+        <div>问题描述有用户反馈在dubbo的应用发布后，过几分钟之后，调用方会出现大量的connectTimeout。当时在服务端容器上进行了抓包，看到在故障期间，客户端发了syn，但是服务端没有任何响应。
+
+
+分析问题正常的TCP三次握手：
+
+
+
+客户端发送syn给服务端发起握手
+
+服务端收到syn后回复syn+ack
+
+客户端收到syn+ack后，回复ack给服务端，此时客户端上这个连接，进入establ</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-10-21
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/sre/">sre</a>
+            
+              <a href="/tags/tcp/">tcp</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2019/08/23/MasteringGo-%E7%BF%BB%E8%AF%91%E5%AE%8C%E6%88%90/">MasteringGo 翻译完成</a>
+
+      <a href="/2019/08/23/MasteringGo-%E7%BF%BB%E8%AF%91%E5%AE%8C%E6%88%90/" class="index-excerpt">
+        
+        
+          
+        
+        <div>之前，运维或者运维开发很多时候主力语言都是python，python作为动态解释性语言，一方面，较低的运行效率，一些场景无法满足，另一方面，过于灵活的语言特性也导致多人协作和项目维护成本较高。受益于云原生的发展，Golang自然也成为了云计算时代的语言，所以也希望Golang能够替代Python，成为后续团队内的主力开发语言。一方面是自己参加Golang委员会，推动Golang的一些技术落地，另一</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-08-23
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/golang/">golang</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2019/04/30/%E5%85%B3%E4%BA%8E-423-%E6%95%85%E9%9A%9C/">关于 423 故障</a>
+
+      <a href="/2019/04/30/%E5%85%B3%E4%BA%8E-423-%E6%95%85%E9%9A%9C/" class="index-excerpt">
+        
+        
+          
+        
+        <div>其实写这种文章压力很大，因为本身自己写这种总结类文章文采真的很差，刚好昨天聊到了这个话题，我还是想把自己想的一些思考记录下来。
+故障原因和恢复过程就不介绍了，只能说故障确实是暴露问题最充分的渠道，故障后，灾备设计、稳定性工具、容量规划、HA设计等等，都暴露出很多问题。
+</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-04-30
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/sre/">sre</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2019/04/19/%E4%B8%80%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%AF%E4%BB%A5%E5%8F%91%E8%B5%B7%E5%A4%9A%E5%B0%91%E4%B8%AA%E8%BF%9E%E6%8E%A5/">一台服务器可以发起多少个连接</a>
+
+      <a href="/2019/04/19/%E4%B8%80%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%AF%E4%BB%A5%E5%8F%91%E8%B5%B7%E5%A4%9A%E5%B0%91%E4%B8%AA%E8%BF%9E%E6%8E%A5/" class="index-excerpt">
+        
+        
+          
+        
+        <div>最近好多同学纠结这个问题，拿出以前分享的ppt发个博客。总结来说，发起多少连接不受源端口限制，只要保证TCP四元组唯一，那么就可以继续建立连接。</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-04-19
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/tcp/">tcp</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2019/02/14/two-sum/">two-sum</a>
+
+      <a href="/2019/02/14/two-sum/" class="index-excerpt">
+        
+        
+          
+        
+        <div>最近刚好在学golang，所以就拿简单的LeetCode提来练习练习，顺便把结果分享下
+题目描述：
+给定一个整数数组nums和一个目标值target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
+你可以假设每种输入只会对应一个答案。但是，你不能重复利用这个数组中同样的元素。
+示例：
+给定 nums &#x3D; [2, 7, 11, 15], target &#x3D; 9</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-02-14
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/golang/">golang</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="iconfont icon-arrowright"></i></a>
+    </span>
+  </nav>
+  
+  <script>
+    for (ele of document.getElementById("pagination").getElementsByTagName("a")) {
+      ele.href += '#board';
+    }
+  </script>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?16629fdb2f63b0edd20d6ba882477d54";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-113770326-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Write the Code. Change the World.&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

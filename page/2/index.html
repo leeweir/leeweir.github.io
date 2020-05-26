@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="嗜好太多，能力太小">
+  <meta name="author" content="LeeWeir">
+  <meta name="keywords" content="">
+  <title>Weir&#39;s Note</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+
+<body>
+  <header style="height: 100vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Weir's Note</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/home.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+          </div>
+
+          
+            <div class="scroll-down-bar">
+              <i class="iconfont icon-arrowdown"></i>
+            </div>
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      <div class="container nopadding-md">
+        <div class="py-5" id="board"
+          style=margin-top:0>
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2019/02/02/DNS-%E7%BC%93%E5%AD%98%E4%BB%8B%E7%BB%8D--NSCD/">DNS 缓存介绍: NSCD</a>
+
+      <a href="/2019/02/02/DNS-%E7%BC%93%E5%AD%98%E4%BB%8B%E7%BB%8D--NSCD/" class="index-excerpt">
+        
+        
+          
+        
+        <div>前言NSCD（name service cache daemon）是我们在linux上最常用的DNS缓存服务，它是glibc网络库的一个组件。基本上来讲我们能见到的一些编程语言和开发框架最终均会调用到glibc的网络解析的函数（如GETHOSTBYNAME or GETHOSTBYADDR等），因此绝大部分程序能够使用NSCD提供的缓存服务。当然如果是应用端自己用socket编写了一个网络clie</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-02-02
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/sre/">sre</a>
+            
+              <a href="/tags/dns/">dns</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2018/10/16/TLS1-3-%E5%88%9D%E6%8E%A2/">TLS1.3 初探</a>
+
+      <a href="/2018/10/16/TLS1-3-%E5%88%9D%E6%8E%A2/" class="index-excerpt">
+        
+        
+          
+        
+        <div>openssl1.1.1 final正式发布后，准备在线上开始灰度了。虽然之前有一些了解，但是其实没有准确的认知，所以需要再好好的分析一下：
+大体上的区别我们先看下tls1.3和tls1.2有什么区别：tls1.3：
+
+
+tls1.2：
+
+
+从这两张图就可以明显的看出tls1.3和tls1.2的数据包的不同，在tls1.3中，自从ServerHello之后全是Application Data了，甚</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2018-10-16
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/https/">https</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2018/09/12/%E5%90%AC%E8%AF%B4%E4%BD%A0%E8%AE%BF%E9%97%AE%E4%BA%86-Ctrip/">听说你访问了 Ctrip</a>
+
+      <a href="/2018/09/12/%E5%90%AC%E8%AF%B4%E4%BD%A0%E8%AE%BF%E9%97%AE%E4%BA%86-Ctrip/" class="index-excerpt">
+        
+        
+          
+        
+        <div>
+昨天和新人交谈的时候，发现他们对网站整体的访问和架构都不清楚，所以想着可以写一篇比较白话一点的技术入门文章，内容上也可以慢慢丰富。
+
+马上就是国庆了，然后你想出去旅游，你打开了Ctrip。下面来看看，当你在浏览器轻轻 www.ctrip.com   以后发生了什么？
+首先你的浏览器查询了DNS服务器（注：能够使人更方便的访问互联网，而不用去记住能够被机器直接读取的IP地址，例如192.168.1</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2018-09-12
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/sre/">sre</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2018/08/22/8-8-8-8-%E7%9A%84%E9%97%AE%E9%A2%98/">8.8.8.8 的问题</a>
+
+      <a href="/2018/08/22/8-8-8-8-%E7%9A%84%E9%97%AE%E9%A2%98/" class="index-excerpt">
+        
+        
+          
+        
+        <div>
+其实这不是8.8.8.8的问题。
+
+我们的海外站点使用了akamai的海外加速，最近有海外用户报障说访问海外站点缓慢，排查后发现直接访问了国内的源站， 且公共dns使用的是8.8.8.8，可以说非常奇怪。
+相信大家都知道8.8.8.8是谷歌的公共dns地址，我们先来看下技术。
+8.8.8.8完美支持edns-subnet-client（ecs，其实是谷歌自己提出来的协议），怎么理解呢，国内用户设</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2018-08-22
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/sre/">sre</a>
+            
+              <a href="/tags/dns/">dns</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2018/07/20/Python-%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%B7%A5%E5%85%B7-Black/">Python 格式化工具 Black</a>
+
+      <a href="/2018/07/20/Python-%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%B7%A5%E5%85%B7-Black/" class="index-excerpt">
+        
+        
+          
+        
+        <div>Black是facebook提供的一个python formatter工具，体验了下确实很不错，现在默认编码格式化就用它了。 名字的是来自福特公司当年说过的一句话：
+
+Any customer can have a car painted any color that he wants so long as it is black.
+
+具体的code style我就不介绍了，可以查看：https:</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2018-07-20
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/python/">python</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2018/06/07/skyline-timeseries-%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95%E4%BB%8B%E7%BB%8D/">skyline timeseries 异常检测算法介绍</a>
+
+      <a href="/2018/06/07/skyline-timeseries-%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95%E4%BB%8B%E7%BB%8D/" class="index-excerpt">
+        
+        
+          
+        
+        <div>最近重新拾起了异常检测这块内容，所以把skyline预定义的几个算法分析了下，总体来说代码还是比较简单和清楚的，输入是一个timeseries，输出是检测结果（True or False）。
+3-sigma一个很直接的异常判定思路是，拿最新3个datapoint的平均值（tail_avg方法）和整个序列比较，看是否偏离总体平均水平太多。怎样算“太多”呢，因为standard deviation表示</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2018-06-07
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/sre/">sre</a>
+            
+              <a href="/tags/aiops/">aiops</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2018/04/08/%E6%B5%8B%E8%AF%95%E5%87%A0%E4%B8%AA%E5%85%AC%E5%85%B1-dns-%E7%9A%84%E6%80%A7%E8%83%BD/">测试几个公共 dns 的性能</a>
+
+      <a href="/2018/04/08/%E6%B5%8B%E8%AF%95%E5%87%A0%E4%B8%AA%E5%85%AC%E5%85%B1-dns-%E7%9A%84%E6%80%A7%E8%83%BD/" class="index-excerpt">
+        
+        
+          
+        
+        <div>最近CloudFlare推出了自己的免费DNS解析器：1.1.1.1，可以说CloudFlare是我比较喜欢的一个公司之一，当时在想具体性能怎么样，所以找了个工具本地测试了下。Shell脚本测试公共dns的性能，可以测试各个dns server的解析速度，标准输出如下：
+&#123; dnsperftest &#125; master » bash ./dnstest.sh |sort -k 22</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2018-04-08
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/dns/">dns</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2018/03/23/%E8%B0%88%E8%B0%88-syn-cookie-%E7%9A%84%E9%97%AE%E9%A2%98/">谈谈 syn cookie 的问题</a>
+
+      <a href="/2018/03/23/%E8%B0%88%E8%B0%88-syn-cookie-%E7%9A%84%E9%97%AE%E9%A2%98/" class="index-excerpt">
+        
+        
+          
+        
+        <div>先讲讲Syn Flood攻击Syn Flood是常见的一种拒绝服务（DOS）攻击方式，所谓的拒绝服务攻击就是通过攻击，使受害主机或者网络不能提供良好的服务，从而达到攻击的目的。
+SYN Flood攻击利用的是IPv4中TCP协议的三次握手(Three-Way Handshake)过程进行的攻击。TCP服务器收到TCP SYN request包时，在发送TCP SYN + ACK包回客户机前，TCP</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2018-03-23
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/sre/">sre</a>
+            
+              <a href="/tags/tcp/">tcp</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2018/03/09/%E8%B0%88%E8%B0%88%E8%AF%81%E4%B9%A6%E9%93%BE%E7%9A%84%E9%97%AE%E9%A2%98/">谈谈证书链的问题</a>
+
+      <a href="/2018/03/09/%E8%B0%88%E8%B0%88%E8%AF%81%E4%B9%A6%E9%93%BE%E7%9A%84%E9%97%AE%E9%A2%98/" class="index-excerpt">
+        
+        
+          
+        
+        <div>这两天公司遇到影响比较大的故障，是因为服务端证书给的证书链上配置的中间证书错了，导致一部分android用户访问失败。完整的证书内容一般分为3级，服务端证书-中间证书-根证书。其中Root CA是信任锚点，一条证书链中只能有一个。Intermediate CA可以有多个。Root CA通常不直接签发用户证书，而是签发Intermediate CA，由Intermediate CA来签发终用户书。它</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2018-03-09
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/sre/">sre</a>
+            
+              <a href="/tags/https/">https</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2018/03/05/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E5%85%A5%E9%97%A8/">系统设计入门</a>
+
+      <a href="/2018/03/05/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E5%85%A5%E9%97%A8/" class="index-excerpt">
+        
+        
+          
+        
+        <div>
+
+原文地址：github.com/donnemartin/system-design-primer
+
+
+系统设计入门
+  
+  
+
+
+目的
+学习如何设计大型系统。
+为系统设计的面试做准备。
+
+学习如何设计大型系统学习如何设计可扩展的系统将会有助于你成为一个更好的工程师。
+系统设计是一个很宽泛的话题。在互联网上，关于系统设计原则的资源也是多如牛毛。
+这个仓库就是这些资源的组织收集，它可以帮助你学习</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2018-03-05
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/design/">design</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="iconfont icon-arrowright"></i></a>
+    </span>
+  </nav>
+  
+  <script>
+    for (ele of document.getElementById("pagination").getElementsByTagName("a")) {
+      ele.href += '#board';
+    }
+  </script>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?16629fdb2f63b0edd20d6ba882477d54";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-113770326-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Write the Code. Change the World.&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
