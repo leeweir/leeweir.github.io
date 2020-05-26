@@ -174,7 +174,7 @@
     <link href="/posts/how-many-connections-can-a-server-send/"/>
     <url>/posts/how-many-connections-can-a-server-send/</url>
     
-    <content type="html"><![CDATA[<p>最近好多同学纠结这个问题，拿出以前分享的ppt发个博客。<br>总结来说，发起多少连接不受源端口限制，只要保证TCP四元组唯一，那么就可以继续建立连接。</p><a id="more"></a><!-- <div class="row">    <embed src="./1.pdf" width="100%" height="550" type="application/pdf"></div> --><object data="./一台服务器可以发起多少个连接/1.pdf" type="application/pdf" width="100%" height="100%">]]></content>
+    <content type="html"><![CDATA[<p>最近好多同学纠结这个问题，拿出以前分享的ppt发个博客。<br>总结来说，发起多少连接不受源端口限制，只要保证TCP四元组唯一，那么就可以继续建立连接。</p><a id="more"></a><!-- <div class="row">    <embed src="./1.pdf" width="100%" height="550" type="application/pdf"></div> --><object data="./1.pdf" type="application/pdf" width="100%" height="877px">]]></content>
     
     
     
