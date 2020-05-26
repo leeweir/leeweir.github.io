@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="嗜好太多，能力太小">
+  <meta name="author" content="LeeWeir">
+  <meta name="keywords" content="">
+  <title>wget 或者 curl 无法正确解析域名，而 ping 可以 - Weir&#39;s Note</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+
+<body>
+  <header style="height: 40vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Weir's Note</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/home.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2018-02-01 14:17">
+                    2018年2月1日 下午
+                  </time>
+                </div>
+              
+
+              <div class="mt-1">
+                
+                  
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
+                    2.3k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    41
+                     分钟
+                  </span>
+                
+
+                
+              </div>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>刚才用户反馈服务器上不能wget一个资源，我这边具体测试了下，现象如下</p>
+<blockquote>
+<p>指定IPV4可以正常访问<br>指定IPV6无法访问<br>不指定的时候看到域名对应的解析地址不对，正确的是10.x.x.51，而这个是10.x.x.110。</p>
+</blockquote>
+<p>经过排查，这个域名在上周做过域名指向调整，从10.x.x.110修改为10.x.x.51</p>
+<pre><code class="hljs text">[admin@xx ~]$ curl -4 -avo &#x2F;dev&#x2F;null http:&#x2F;&#x2F;meta.xxx.com&#x2F;metaserver&#x2F;servers
+* About to connect() to meta.xxx.com port 80 (#0)
+*   Trying 10.x.x.51... connected
+* Connected to meta.xxx.com (10.x.x.51) port 80 (#0)
+&gt; GET &#x2F;metaserver&#x2F;servers HTTP&#x2F;1.1
+&gt; User-Agent: curl&#x2F;7.19.7 (x86_64-redhat-linux-gnu) libcurl&#x2F;7.19.7 NSS&#x2F;3.13.6.0 zlib&#x2F;1.2.3 libidn&#x2F;1.18 libssh2&#x2F;1.4.2
+&gt; Host: meta.xxx.com
+&gt; Accept: *&#x2F;*
+&gt;
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0&lt; HTTP&#x2F;1.1 200 OK
+&lt; Server: Apache-Coyote&#x2F;1.1
+&lt; Access-Control-Allow-Origin: *
+&lt; Access-Control-Allow-Methods: GET, POST, DELETE, PUT
+&lt; Access-Control-Allow-Headers: X-Requested-With, Content-Type, X-Codingpedia
+&lt; Content-Type: application&#x2F;json;charset&#x3D;utf-8
+&lt; Content-Length: 405
+&lt; Date: Thu, 01 Feb 2018 06:15:02 GMT
+&lt;
+&#123; [data not shown]
+101   405  101   405    0     0   239k      0 --:--:-- --:--:-- --:--:--  395k* Connection #0 to host meta.xxx.com left intact
+
+* Closing connection #0
+
+
+[admin@xx ~]$ curl -6 -avo &#x2F;dev&#x2F;null http:&#x2F;&#x2F;meta.xxx.com&#x2F;metaserver&#x2F;servers
+* getaddrinfo(3) failed for meta.xxx.com:80
+* Couldn&#39;t resolve host &#39;meta.xxx.com&#39;
+* Closing connection #0
+
+curl: (6) Couldn&#39;t resolve host &#39;meta.xxx.com&#39;
+
+
+[admin@xx ~]$ curl -avo &#x2F;dev&#x2F;null http:&#x2F;&#x2F;meta.xxx.com&#x2F;metaserver&#x2F;servers
+* About to connect() to meta.xxx.com port 80 (#0)
+*   Trying 10.x.x.110... No route to host
+* couldn&#39;t connect to host
+* Closing connection #0
+
+curl: (7) couldn&#39;t connect to host</code></pre>
+
+<h2 id="排查过程"><a href="#排查过程" class="headerlink" title="排查过程"></a>排查过程</h2><p>网上查了些资料，通过curl(依赖libcurl)的程序，如果开启了IPv6，curl默认会优先解析IPv6，在对应域名没有IPv6的情况下，会等待IPv6dns解析失败timeout之后才按以前的正常流程去找IPv4原因。但是比较奇怪的是，即使是这样，顶多是访问慢，但是为什么会解析到上周已经切换到的一个IP呢？<br>我分别strace了下<br>不指定ipv4/6，直接wget meta.xxx.com</p>
+<pre><code class="hljs text">write(2, &quot;Resolving meta.xxx&quot;..., 42Resolving meta.xxx.com... ) &#x3D; 42
+socket(PF_NETLINK, SOCK_RAW, 0) &#x3D; 3
+bind(3, &#123;sa_family&#x3D;AF_NETLINK, pid&#x3D;0, groups&#x3D;00000000&#125;, 12) &#x3D; 0
+getsockname(3, &#123;sa_family&#x3D;AF_NETLINK, pid&#x3D;32303, groups&#x3D;00000000&#125;, [12]) &#x3D; 0
+sendto(3, &quot;\24\0\0\0\26\0\1\3@\301rZ\0\0\0\0\0\0\0\0&quot;, 20, 0, &#123;sa_family&#x3D;AF_NETLINK, pid&#x3D;0, groups&#x3D;00000000&#125;, 12) &#x3D; 20
+recvmsg(3, &#123;msg_name(12)&#x3D;&#123;sa_family&#x3D;AF_NETLINK, pid&#x3D;0, groups&#x3D;00000000&#125;, msg_iov(1)&#x3D;[&#123;&quot;0\0\0\0\24\0\2\0@\301rZ&#x2F;~\0\0\2\10\200\376\1\0\0\0\10\0\1\0\177\0\0\1&quot;..., 4096&#125;], msg_controllen&#x3D;0, msg_flags&#x3D;0&#125;, 0) &#x3D; 108
+recvmsg(3, &#123;msg_name(12)&#x3D;&#123;sa_family&#x3D;AF_NETLINK, pid&#x3D;0, groups&#x3D;00000000&#125;, msg_iov(1)&#x3D;[&#123;&quot;@\0\0\0\24\0\2\0@\301rZ&#x2F;~\0\0\n\200\200\376\1\0\0\0\24\0\1\0\0\0\0\0&quot;..., 4096&#125;], msg_controllen&#x3D;0, msg_flags&#x3D;0&#125;, 0) &#x3D; 128
+recvmsg(3, &#123;msg_name(12)&#x3D;&#123;sa_family&#x3D;AF_NETLINK, pid&#x3D;0, groups&#x3D;00000000&#125;, msg_iov(1)&#x3D;[&#123;&quot;\24\0\0\0\3\0\2\0@\301rZ&#x2F;~\0\0\0\0\0\0\1\0\0\0\24\0\1\0\0\0\0\0&quot;..., 4096&#125;], msg_controllen&#x3D;0, msg_flags&#x3D;0&#125;, 0) &#x3D; 20
+close(3) &#x3D; 0
+socket(PF_FILE, SOCK_STREAM|SOCK_CLOEXEC|SOCK_NONBLOCK, 0) &#x3D; 3
+connect(3, &#123;sa_family&#x3D;AF_FILE, path&#x3D;&quot;&#x2F;var&#x2F;run&#x2F;nscd&#x2F;socket&quot;&#125;, 110) &#x3D; 0
+sendto(3, &quot;\2\0\0\0\r\0\0\0\6\0\0\0hosts\0&quot;, 18, MSG_NOSIGNAL, NULL, 0) &#x3D; 18
+poll([&#123;fd&#x3D;3, events&#x3D;POLLIN|POLLERR|POLLHUP&#125;], 1, 5000) &#x3D; 1 ([&#123;fd&#x3D;3, revents&#x3D;POLLIN|POLLHUP&#125;])
+recvmsg(3, &#123;msg_name(0)&#x3D;NULL, msg_iov(2)&#x3D;[&#123;&quot; PS2\0\0&quot;, 6&#125;, &#123;&quot;\201\320;X\0\0\0\0&quot;, 8&#125;], msg_controllen&#x3D;0, msg_flags&#x3D;MSG_CMSG_CLOEXEC&#125;, MSG_CMSG_CLOEXEC) &#x3D; 0
+close(3) &#x3D; 0
+socket(PF_FILE, SOCK_STREAM|SOCK_CLOEXEC|SOCK_NONBLOCK, 0) &#x3D; 3
+connect(3, &#123;sa_family&#x3D;AF_FILE, path&#x3D;&quot;&#x2F;var&#x2F;run&#x2F;nscd&#x2F;socket&quot;&#125;, 110) &#x3D; 0
+sendto(3, &quot;\2\0\0\0\16\0\0\0\35\0\0\0meta.xxxip&quot;..., 41, MSG_NOSIGNAL, NULL, 0) &#x3D; 41
+poll([&#123;fd&#x3D;3, events&#x3D;POLLIN|POLLERR|POLLHUP&#125;], 1, 5000) &#x3D; 1 ([&#123;fd&#x3D;3, revents&#x3D;POLLIN|POLLHUP&#125;])
+read(3, &quot;\2\0\0\0\1\0\0\0\1\0\0\0\4\0\0\0!\0\0\0\0\0\0\0&quot;, 24) &#x3D; 24
+read(3, &quot;\n\10\224n\2meta.hermes.fx.sh2.ctripcor&quot;..., 38) &#x3D; 38
+close(3) &#x3D; 0
+write(2, &quot;10.x.x.110&quot;, 1210.x.x.110) &#x3D; 12
+write(2, &quot;\n&quot;, 1
+) &#x3D; 1
+write(2, &quot;Connecting to meta.xxx&quot;..., 63Connecting to meta.xxx.com|10.x.x.110|:80... ) &#x3D; 63</code></pre>
+
+<p>指定ipv4</p>
+<pre><code class="hljs text">write(2, &quot;Resolving meta.xxxipco&quot;..., 42Resolving meta.xxx.com... ) &#x3D; 42
+socket(PF_NETLINK, SOCK_RAW, 0) &#x3D; 3
+bind(3, &#123;sa_family&#x3D;AF_NETLINK, pid&#x3D;0, groups&#x3D;00000000&#125;, 12) &#x3D; 0
+getsockname(3, &#123;sa_family&#x3D;AF_NETLINK, pid&#x3D;9267, groups&#x3D;00000000&#125;, [12]) &#x3D; 0
+sendto(3, &quot;\24\0\0\0\26\0\1\3\303\304rZ\0\0\0\0\0\0\0\0&quot;, 20, 0, &#123;sa_family&#x3D;AF_NETLINK, pid&#x3D;0, groups&#x3D;00000000&#125;, 12) &#x3D; 20
+recvmsg(3, &#123;msg_name(12)&#x3D;&#123;sa_family&#x3D;AF_NETLINK, pid&#x3D;0, groups&#x3D;00000000&#125;, msg_iov(1)&#x3D;[&#123;&quot;0\0\0\0\24\0\2\0\303\304rZ3$\0\0\2\10\200\376\1\0\0\0\10\0\1\0\177\0\0\1&quot;..., 4096&#125;], msg_controllen&#x3D;0, msg_flags&#x3D;0&#125;, 0) &#x3D; 108
+recvmsg(3, &#123;msg_name(12)&#x3D;&#123;sa_family&#x3D;AF_NETLINK, pid&#x3D;0, groups&#x3D;00000000&#125;, msg_iov(1)&#x3D;[&#123;&quot;@\0\0\0\24\0\2\0\303\304rZ3$\0\0\n\200\200\376\1\0\0\0\24\0\1\0\0\0\0\0&quot;..., 4096&#125;], msg_controllen&#x3D;0, msg_flags&#x3D;0&#125;, 0) &#x3D; 128
+recvmsg(3, &#123;msg_name(12)&#x3D;&#123;sa_family&#x3D;AF_NETLINK, pid&#x3D;0, groups&#x3D;00000000&#125;, msg_iov(1)&#x3D;[&#123;&quot;\24\0\0\0\3\0\2\0\303\304rZ3$\0\0\0\0\0\0\1\0\0\0\24\0\1\0\0\0\0\0&quot;..., 4096&#125;], msg_controllen&#x3D;0, msg_flags&#x3D;0&#125;, 0) &#x3D; 20
+close(3) &#x3D; 0
+open(&quot;&#x2F;etc&#x2F;resolv.conf&quot;, O_RDONLY) &#x3D; 3
+fstat(3, &#123;st_mode&#x3D;S_IFREG|0644, st_size&#x3D;43, ...&#125;) &#x3D; 0
+mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) &#x3D; 0x7f15151ad000
+read(3, &quot;nameserver 10.8.86.1\nnameserver &quot;..., 4096) &#x3D; 43
+read(3, &quot;&quot;, 4096) &#x3D; 0
+close(3) &#x3D; 0
+munmap(0x7f15151ad000, 4096) &#x3D; 0
+uname(&#123;sys&#x3D;&quot;Linux&quot;, node&#x3D;&quot;SVR13350HW1288&quot;, ...&#125;) &#x3D; 0
+socket(PF_FILE, SOCK_STREAM|SOCK_CLOEXEC|SOCK_NONBLOCK, 0) &#x3D; 3
+connect(3, &#123;sa_family&#x3D;AF_FILE, path&#x3D;&quot;&#x2F;var&#x2F;run&#x2F;nscd&#x2F;socket&quot;&#125;, 110) &#x3D; 0
+sendto(3, &quot;\2\0\0\0\r\0\0\0\6\0\0\0hosts\0&quot;, 18, MSG_NOSIGNAL, NULL, 0) &#x3D; 18
+poll([&#123;fd&#x3D;3, events&#x3D;POLLIN|POLLERR|POLLHUP&#125;], 1, 5000) &#x3D; 1 ([&#123;fd&#x3D;3, revents&#x3D;POLLIN|POLLHUP&#125;])
+recvmsg(3, &#123;msg_name(0)&#x3D;NULL, msg_iov(2)&#x3D;[&#123;&quot;\20\337\1\0\3\0&quot;, 6&#125;, &#123;&quot;\1\0\0\0\0\0\0\0&quot;, 8&#125;], msg_controllen&#x3D;0, msg_flags&#x3D;MSG_CMSG_CLOEXEC&#125;, MSG_CMSG_CLOEXEC) &#x3D; 0
+close(3) &#x3D; 0
+socket(PF_FILE, SOCK_STREAM|SOCK_CLOEXEC|SOCK_NONBLOCK, 0) &#x3D; 3
+connect(3, &#123;sa_family&#x3D;AF_FILE, path&#x3D;&quot;&#x2F;var&#x2F;run&#x2F;nscd&#x2F;socket&quot;&#125;, 110) &#x3D; 0
+sendto(3, &quot;\2\0\0\0\4\0\0\0\35\0\0\0meta.xxxip&quot;..., 41, MSG_NOSIGNAL, NULL, 0) &#x3D; 41
+poll([&#123;fd&#x3D;3, events&#x3D;POLLIN|POLLERR|POLLHUP&#125;], 1, 5000) &#x3D; 1 ([&#123;fd&#x3D;3, revents&#x3D;POLLIN|POLLHUP&#125;])
+read(3, &quot;\2\0\0\0\1\0\0\0!\0\0\0\1\0\0\0\2\0\0\0\4\0\0\0\1\0\0\0\0\0\0\0&quot;, 32) &#x3D; 32
+readv(3, [&#123;&quot;meta.xxxgslb.com&quot;..., 33&#125;, &#123;&quot;\35\0\0\0&quot;, 4&#125;, &#123;&quot;\n\10u3&quot;, 4&#125;], 3) &#x3D; 41
+read(3, &quot;meta.xxx.com\0&quot;, 29) &#x3D; 29
+close(3) &#x3D; 0
+write(2, &quot;10.x.x.51&quot;, 1110.x.x.51) &#x3D; 11
+write(2, &quot;\n&quot;, 1
+) &#x3D; 1</code></pre>
+
+<p>发现指定ipv4的情况下，多了下面这段trace，刚开始猜测是不是ipv4的会发起dns query，而不指定的话不会发起，实际验证下来不是这个原因。<br>最后可以看到都是nscd缓存返回的结果，因为nscd的缓存内容不能直接查看，为了解决问题，我就先把nscd服务重启了下。</p>
+<pre><code class="hljs text">open(&quot;&#x2F;etc&#x2F;resolv.conf&quot;, O_RDONLY) &#x3D; 3
+fstat(3, &#123;st_mode&#x3D;S_IFREG|0644, st_size&#x3D;43, ...&#125;) &#x3D; 0
+mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) &#x3D; 0x7f15151ad000
+read(3, &quot;nameserver 10.8.86.1\nnameserver &quot;..., 4096) &#x3D; 43
+read(3, &quot;&quot;, 4096) &#x3D; 0
+close(3) &#x3D; 0</code></pre>
+
+<p>然后直接用curl访问，已经可以正常返回结果了</p>
+<pre><code class="hljs text">[admin@xx ~]$ curl -4 -avo &#x2F;dev&#x2F;null http:&#x2F;&#x2F;meta.xxx.com&#x2F;metaserver&#x2F;servers
+* About to connect() to meta.xxx.com port 80 (#0)
+*   Trying 10.15.200.27... connected
+* Connected to meta.xxx.com (10.15.200.27) port 80 (#0)
+&gt; GET &#x2F;metaserver&#x2F;servers HTTP&#x2F;1.1
+&gt; User-Agent: curl&#x2F;7.19.7 (x86_64-redhat-linux-gnu) libcurl&#x2F;7.19.7 NSS&#x2F;3.13.6.0 zlib&#x2F;1.2.3 libidn&#x2F;1.18 libssh2&#x2F;1.4.2
+&gt; Host: meta.xxx.com
+&gt; Accept: *&#x2F;*
+&gt;
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0&lt; HTTP&#x2F;1.1 200 OK
+&lt; Server: Apache-Coyote&#x2F;1.1
+&lt; Access-Control-Allow-Origin: *
+&lt; Access-Control-Allow-Methods: GET, POST, DELETE, PUT
+&lt; Access-Control-Allow-Headers: X-Requested-With, Content-Type, X-Codingpedia
+&lt; Content-Type: application&#x2F;json;charset&#x3D;utf-8
+&lt; Content-Length: 405
+&lt; Date: Thu, 01 Feb 2018 10:02:23 GMT
+&lt;
+&#123; [data not shown]
+101   405  101   405    0     0  75729      0 --:--:-- --:--:-- --:--:--   98k* Connection #0 to host meta.xxx.com left intact
+
+* Closing connection #0</code></pre>
+
+<h2 id="根因"><a href="#根因" class="headerlink" title="根因"></a>根因</h2><p>其实这个只是暂时解决了问题，但是不指定协议访问的时候，为什么直接从缓存里返回了结果而不做dns解析，还是要具体从libcurl的实现上去分析，后面有空把这段内容补上。不过说回来，dns client cache确实很坑，缓存了上周的一个ip地址，这些问题都需要再深入排查。</p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/sre/">sre</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/DomContentLoaded-and-Load/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">DomContentLoaded 和 Load 的区别</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/posts/nginx-tls-session-reuse/">
+                        <span class="hidden-mobile">Nginx TLS Session 复用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script defer src="https://cdn.staticfile.org/valine/1.4.14/Valine.min.js" ></script>
+
+  <script type="text/javascript">
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+
+      new Valine({
+        el: "#vcomments",
+        app_id: "JKf8JONcO04nQXbrYfw2cpI4-gzGzoHsz",
+        app_key: "qYmKYBbQqMMyPzTr7nL8GaeV",
+        placeholder: "留下你的建议",
+        path: window.location.pathname,
+        avatar: "retro",
+        meta: ["nick","mail"],
+        pageSize: "10",
+        lang: "zh-CN",
+        highlight: true,
+        recordIP: true,
+        serverURLs: "",
+      });
+    };
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://valine.js.org" target="_blank" rel="nofollow noopener noopener">comments
+      powered by Valine.</a></noscript>
+
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?16629fdb2f63b0edd20d6ba882477d54";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-113770326-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "wget 或者 curl 无法正确解析域名，而 ping 可以&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

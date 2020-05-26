@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="嗜好太多，能力太小">
+  <meta name="author" content="LeeWeir">
+  <meta name="keywords" content="">
+  <title>HTTP/2 介绍 - Weir&#39;s Note</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+
+<body>
+  <header style="height: 40vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Weir's Note</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/home.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2018-02-06 13:58">
+                    2018年2月6日 下午
+                  </time>
+                </div>
+              
+
+              <div class="mt-1">
+                
+                  
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
+                    1.6k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    19
+                     分钟
+                  </span>
+                
+
+                
+              </div>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <p>2017年公司全面切换到了https和http/2，以前也陆续整理了些材料，这里算做一下总结。</p>
+<blockquote>
+<p>HTTP/2 is a replacement for how HTTP is expressed “on the wire.” It is not a ground-up rewrite of the protocol; HTTP methods, status codes and semantics are the same, and it should be possible to use the same APIs as HTTP/1.x (possibly with some small additions) to represent the protocol.</p>
+</blockquote>
+<p>HTTP/2是现行HTTP协议（HTTP/1.x）的替代，但它不是重写，HTTP方法/状态码/语义都与HTTP/1.x一样。HTTP/2基于SPDY3，专注于性能，最大的一个目标是在用户和网站间只用一个连接（connection）。</p>
+<p>HTTP/2由两个规范（Specification）组成：</p>
+<ul>
+<li>Hypertext Transfer Protocol version 2 - RFC7540</li>
+<li>HPACK - Header Compression for HTTP/2 - RFC7541</li>
+</ul>
+<h2 id="为什么需要HTTP-2"><a href="#为什么需要HTTP-2" class="headerlink" title="为什么需要HTTP/2"></a>为什么需要HTTP/2</h2><p>我们知道，影响一个HTTP网络请求的因素主要有两个：带宽和延迟。在今天的网络情况下，带宽一般不再是瓶颈，所以我们主要讨论下延迟。延迟一般有下面几个因素：</p>
+<blockquote>
+<p>浏览器阻塞（Head-Of-Line Blocking）：浏览器会因为一些原因阻塞请求。<br>DNS查询。<br>建立连接（Initial connection）：HTTP基于 TCP 协议，TCP的3次握手和慢启动极大增加延迟。</p>
+</blockquote>
+<p>说完背景，我们讨论下HTTP/1.x中到底存在哪些问题？</p>
+<h3 id="HTTP-1-x的缺陷"><a href="#HTTP-1-x的缺陷" class="headerlink" title="HTTP/1.x的缺陷"></a>HTTP/1.x的缺陷</h3><h4 id="连接无法复用"><a href="#连接无法复用" class="headerlink" title="连接无法复用"></a>连接无法复用</h4><p>连接无法复用会导致每次请求都经历三次握手和慢启动。三次握手在高延迟的场景下影响较明显，慢启动则对文件类大请求影响较大。</p>
+<ul>
+<li>HTTP/1.0传输数据时，每次都需要重新建立连接，增加延迟。</li>
+<li>1.1虽然加入keep-alive可以复用一部分连接，但域名分片等情况下仍然需要建立多个connection，耗费资源，给服务器带来性能压力。</li>
+</ul>
+<h4 id="Head-Of-Line-Blocking"><a href="#Head-Of-Line-Blocking" class="headerlink" title="Head-Of-Line Blocking"></a>Head-Of-Line Blocking</h4><p>导致带宽无法被充分利用，以及后续健康请求被阻塞。HOLB是指一系列包（package）因为第一个包被阻塞；HTTP/1.x中，由于服务器必须按接受请求的顺序发送响应的规则限制，那么假设浏览器在一个（tcp）连接上发送了两个请求，那么服务器必须等第一个请求响应完毕才能发送第二个响应——HOLB。</p>
+<ul>
+<li>虽然现代浏览器允许每个origin建立6个connection，但大量网页动辄几十个资源，HOLB依然是主要问题。</li>
+</ul>
+<h4 id="协议开销大"><a href="#协议开销大" class="headerlink" title="协议开销大"></a>协议开销大</h4><p>HTTP/1.x中header内容过大（每次请求header基本不怎么变化），增加了传输的成本。</p>
+<h4 id="安全因素"><a href="#安全因素" class="headerlink" title="安全因素"></a>安全因素</h4><p>HTTP/1.x中传输的内容都是明文，客户端和服务端双方无法验证身份。</p>
+<h2 id="HTTP-2的新特性"><a href="#HTTP-2的新特性" class="headerlink" title="HTTP/2的新特性"></a>HTTP/2的新特性</h2><p>因为HTTP/1.x的问题，人们提出了各种解决方案。比如希望复用连接的长链接/http long-polling/websocket等等，解决HOLB的Domain Sharding（域名分片）/inline资源/css sprite等等。</p>
+<p>不过以上优化都绕开了协议，直到谷歌推出SPDY，才算是正式改造HTTP协议本身。降低延迟，压缩header等等，SPDY的实践证明了这些优化的效果，也最终带来HTTP/2的诞生。</p>
+<h3 id="新的二进制格式（Binary-Format）"><a href="#新的二进制格式（Binary-Format）" class="headerlink" title="新的二进制格式（Binary Format）"></a>新的二进制格式（Binary Format）</h3><p>http1.x诞生的时候是明文协议，其格式由三部分组成：start line（request line或者status line），header，body。要识别这3部分就要做协议解析，http1.x的解析是基于文本。基于文本协议的格式解析存在天然缺陷，文本的表现形式有多样性，要做到健壮性考虑的场景必然很多，二进制则不同，只认0和1的组合。基于这种考虑http2.0的协议解析决定采用二进制格式，实现方便且健壮。</p>
+
+<p>http2的格式定义十分高效且精简。length定义了整个frame的大小，type定义frame的类型（一共10种），flags用bit位定义一些重要的参数，stream id用作流控制，payload就是request的正文。</p>
+
+
+<h3 id="Header压缩"><a href="#Header压缩" class="headerlink" title="Header压缩"></a>Header压缩</h3><p>http1.x的header由于cookie和user agent很容易膨胀，而且每次都要重复发送。</p>
+<p>http2.0使用encoder来减少需要传输的header大小，通讯双方各自cache一份header fields表，既避免了重复header的传输，又减小了需要传输的大小。高效的压缩算法可以很大的压缩header，减少发送包的数量从而降低延迟。</p>
+<h3 id="流（stream）和多路复用（MultiPlexing）"><a href="#流（stream）和多路复用（MultiPlexing）" class="headerlink" title="流（stream）和多路复用（MultiPlexing）"></a>流（stream）和多路复用（MultiPlexing）</h3><p>什么是stream？</p>
+<blockquote>
+<p>Multiplexing of requests is achieved by having each HTTP request/response exchange associated with its own stream. Streams are largely independent of each other, so a blocked or stalled request or response does not prevent progress on other streams.</p>
+</blockquote>
+<blockquote>
+<p>A “stream” is an independent, bidirectional sequence of frames exchanged between the client and server within an HTTP/2 connection.</p>
+</blockquote>
+<blockquote>
+<p>A client sends an HTTP request on a new stream, using a previously unused stream identifier. A server sends an HTTP response on the same stream as the request.<br>Multiplexing of requests is achieved by having each HTTP request/response exchange associated with its own stream.</p>
+</blockquote>
+<p>翻译下，stream就是在HTTP/2连接上的双向帧序列。每个http request都会新建自己的stream，response在同一个stream上返回。</p>
+<p>多路复用（MultiPlexing），即连接共享。之所以可以复用，是因为每个stream高度独立，堵塞的stream不会影响其它stream的处理。一个连接上可以有多个stream，每个stream的frame可以随机的混杂在一起，接收方可以根据stream id将frame再归属到各自不同的request里面。</p>
+<h3 id="流量控制（Flow-Control）"><a href="#流量控制（Flow-Control）" class="headerlink" title="流量控制（Flow Control）"></a>流量控制（Flow Control）</h3><p>类似TCP协议通过sliding window的算法来做流量控制，http2.0使用 WINDOW_UPDATE frame 来做流量控制。每个stream都有流量控制，这保证了数据接收方可以只让自己需要的数据被传输。</p>
+
+
+<h3 id="流优先级（Stream-Priority）"><a href="#流优先级（Stream-Priority）" class="headerlink" title="流优先级（Stream Priority）"></a>流优先级（Stream Priority）</h3><p>每个流可以设置优先级。优先级的目标是允许终端高速对端（当对端处理并发流时）怎么分配资源。</p>
+<p>更重要的是，当传输能力有限时，优先级可以用来挑选哪些流（高优先级）优先传输——这是优化浏览器渲染的关键，即服务端负责设置优先级，使重要的资源优先加载，加速页面渲染。</p>
+<h3 id="Server-Push"><a href="#Server-Push" class="headerlink" title="Server Push"></a>Server Push</h3><p>Server Push即服务端能通过push的方式将客户端需要的内容预先推送过去，也叫“cache push”。</p>
+
+
+<p>参考:<br><a href="https://imququ.com/post/http2-resource.html" target="_blank" rel="noopener">https://imququ.com/post/http2-resource.html</a><br><a href="http://www.alloyteam.com/2016/07/httphttp2-0spdyhttps-reading-this-is-enough/" target="_blank" rel="noopener">http://www.alloyteam.com/2016/07/httphttp2-0spdyhttps-reading-this-is-enough/</a></p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/http2/">http2</a>
+                    
+                      <a class="hover-with-bg" href="/tags/https/">https</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/use-tls13/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">在 OpenSSL 中使用 TLSv1.3</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/posts/DomContentLoaded-and-Load/">
+                        <span class="hidden-mobile">DomContentLoaded 和 Load 的区别</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script defer src="https://cdn.staticfile.org/valine/1.4.14/Valine.min.js" ></script>
+
+  <script type="text/javascript">
+    var oldLoadVa = window.onload;
+    window.onload = function () {
+      oldLoadVa && oldLoadVa();
+
+      new Valine({
+        el: "#vcomments",
+        app_id: "JKf8JONcO04nQXbrYfw2cpI4-gzGzoHsz",
+        app_key: "qYmKYBbQqMMyPzTr7nL8GaeV",
+        placeholder: "留下你的建议",
+        path: window.location.pathname,
+        avatar: "retro",
+        meta: ["nick","mail"],
+        pageSize: "10",
+        lang: "zh-CN",
+        highlight: true,
+        recordIP: true,
+        serverURLs: "",
+      });
+    };
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://valine.js.org" target="_blank" rel="nofollow noopener noopener">comments
+      powered by Valine.</a></noscript>
+
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?16629fdb2f63b0edd20d6ba882477d54";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-113770326-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "HTTP/2 介绍&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
