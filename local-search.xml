@@ -8,9 +8,15 @@
     <link href="/2020/05/25/%E4%BA%91%E5%8E%9F%E7%94%9F%E4%BA%A4%E4%BB%98%E6%80%9D%E8%80%83/"/>
     <url>/2020/05/25/%E4%BA%91%E5%8E%9F%E7%94%9F%E4%BA%A4%E4%BB%98%E6%80%9D%E8%80%83/</url>
     
-    <content type="html"><![CDATA[]]></content>
+    <content type="html"><![CDATA[<p>当 DevOps 遇上容器时，PPT 上往往有各种遐想的空间。实际在落地的过程中，因为公司已有成熟的发布系统，该发布系统是基于虚拟机时代的场景设计，发布主要是更新下代码和重启服务。为了兼容现有的发布模式，交付做的并不成功，和 k8s 的弹性理念存在冲突。所以我们需要打造一个以 k8s 为核心的新一代云原生 PaaS。</p>]]></content>
     
     
+    
+    <tags>
+      
+      <tag>cloud native</tag>
+      
+    </tags>
     
   </entry>
   
@@ -322,9 +328,9 @@
   
   
   <entry>
-    <title>测试几个公共 dns 的性能</title>
-    <link href="/2018/04/08/%E6%B5%8B%E8%AF%95%E5%87%A0%E4%B8%AA%E5%85%AC%E5%85%B1-dns-%E7%9A%84%E6%80%A7%E8%83%BD/"/>
-    <url>/2018/04/08/%E6%B5%8B%E8%AF%95%E5%87%A0%E4%B8%AA%E5%85%AC%E5%85%B1-dns-%E7%9A%84%E6%80%A7%E8%83%BD/</url>
+    <title>测试几个公共 DNS 的性能</title>
+    <link href="/2018/04/08/%E6%B5%8B%E8%AF%95%E5%87%A0%E4%B8%AA%E5%85%AC%E5%85%B1-DNS-%E7%9A%84%E6%80%A7%E8%83%BD/"/>
+    <url>/2018/04/08/%E6%B5%8B%E8%AF%95%E5%87%A0%E4%B8%AA%E5%85%AC%E5%85%B1-DNS-%E7%9A%84%E6%80%A7%E8%83%BD/</url>
     
     <content type="html"><![CDATA[<p>最近CloudFlare推出了自己的免费DNS解析器：1.1.1.1，可以说CloudFlare是我比较喜欢的一个公司之一，当时在想具体性能怎么样，所以找了个工具本地测试了下。<br>Shell脚本测试公共dns的性能，可以测试各个dns server的解析速度，标准输出如下：</p><pre><code class="hljs shell">&#123; dnsperftest &#125; master » bash ./dnstest.sh |sort -k 22 -n                  test1   test2   test3   test4   test5   test6   test7   test8   test9   test10  Averagenorton            32 ms   32 ms   32 ms   32 ms   29 ms   31 ms   31 ms   31 ms   37 ms   33 ms     32.00google            7 ms    50 ms   6 ms    4 ms    62 ms   225 ms  6 ms    48 ms   5 ms    48 ms     46.10opendns           6 ms    73 ms   4 ms    4 ms    71 ms   342 ms  5 ms    74 ms   5 ms    73 ms     65.70neustar           28 ms   117 ms  28 ms   26 ms   112 ms  117 ms  26 ms   116 ms  28 ms   113 ms    71.10quad9             27 ms   199 ms  24 ms   25 ms   182 ms  191 ms  26 ms   185 ms  24 ms   191 ms    107.40cleanbrowsing     4 ms    217 ms  5 ms    5 ms    219 ms  219 ms  4 ms    219 ms  4 ms    219 ms    111.50cloudflare        4 ms    234 ms  4 ms    4 ms    226 ms  226 ms  3 ms    258 ms  3 ms    232 ms    119.40yandex            5 ms    212 ms  4 ms    5 ms    265 ms  251 ms  4 ms    205 ms  5 ms    241 ms    119.70adguard           7 ms    258 ms  7 ms    6 ms    233 ms  242 ms  7 ms    234 ms  5 ms    257 ms    125.60comodo            4 ms    281 ms  4 ms    4 ms    326 ms  327 ms  6 ms    325 ms  6 ms    324 ms    160.70</code></pre><p>具体脚本：</p><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/usr/bin/env bash</span>command -v bc &gt; /dev/null || &#123; echo "bc was not found. Please install bc."; exit 1; &#125;&#123; command -v drill &gt; /dev/null &amp;&amp; dig=drill; &#125; || &#123; command -v dig &gt; /dev/null &amp;&amp; dig=dig; &#125; || &#123; echo "dig was not found. Please install dnsutils."; exit 1; &#125;NAMESERVERS=`cat /etc/resolv.conf | grep ^nameserver | cut -d " " -f 2 | sed 's/\(.*\)/&amp;#&amp;/'`PROVIDERS="1.1.1.1#cloudflare4.2.2.1#level38.8.8.8#google9.9.9.9#quad980.80.80.80#freenom208.67.222.123#opendns199.85.126.20#norton185.228.168.168#cleanbrowsing77.88.8.7#yandex176.103.130.132#adguard156.154.70.3#neustar8.26.56.26#comodo"<span class="hljs-meta">#</span><span class="bash"> Domains to <span class="hljs-built_in">test</span>. Duplicated domains are ok</span>DOMAINS2TEST="www.google.com amazon.com facebook.com www.youtube.com www.reddit.com  wikipedia.org twitter.com gmail.com www.google.com whatsapp.com"totaldomains=0printf "%-18s" ""for d in $DOMAINS2TEST; do    totaldomains=$((totaldomains + 1))    printf "%-8s" "test$totaldomains"doneprintf "%-8s" "Average"echo ""for p in $NAMESERVERS $PROVIDERS; do    pip=$&#123;p%%#*&#125;    pname=$&#123;p##*#&#125;    ftime=0    printf "%-18s" "$pname"    for d in $DOMAINS2TEST; do        ttime=`$dig +tries=1 +time=2 +stats @$pip $d |grep "Query time:" | cut -d : -f 2- | cut -d " " -f 2`        if [ -z "$ttime" ]; then        #let's have time out be 1s = 1000ms        ttime=1000        elif [ "x$ttime" = "x0" ]; then        ttime=1    fi        printf "%-8s" "$ttime ms"        ftime=$((ftime + ttime))    done    avg=`bc -lq &lt;&lt;&lt; "scale=2; $ftime/$totaldomains"`    echo "  $avg"doneexit 0;</code></pre><p>参考：<br><a href="https://blog.cloudflare.com/announcing-1111/" target="_blank" rel="noopener">https://blog.cloudflare.com/announcing-1111/</a></p>]]></content>
     
@@ -503,9 +509,9 @@
   
   
   <entry>
-    <title>解决fullnat下获取用户源IP</title>
-    <link href="/2018/01/31/%E8%A7%A3%E5%86%B3fullnat%E4%B8%8B%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E6%BA%90IP/"/>
-    <url>/2018/01/31/%E8%A7%A3%E5%86%B3fullnat%E4%B8%8B%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E6%BA%90IP/</url>
+    <title>解决 fullnat 下获取用户源 IP</title>
+    <link href="/2018/01/31/%E8%A7%A3%E5%86%B3-fullnat-%E4%B8%8B%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E6%BA%90-IP/"/>
+    <url>/2018/01/31/%E8%A7%A3%E5%86%B3-fullnat-%E4%B8%8B%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E6%BA%90-IP/</url>
     
     <content type="html"><![CDATA[<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p>在设计L4负载均衡架构的时候，往往选择fnat，它支持LB和RS垮vlan通信。LB位于客户端和后端服务之间，对于客户端的请求报文，将目的地址替换成后端服务的地址，源地址替换成LB的本地地址，对于后端服务的响应报文，将目的地址替换成客户端地址，源地址替换成LB的VIP地址。<br>这样就带来一个问题，后端RS上就看不到客户端的源IP了，业内比较常见的有两种解决方案：</p><blockquote><p>TOA，将客户端源IP插入到TCP Option中<br>Proxy Protocol，将客户端IP插入到TCP payload中</p></blockquote><p>下面分别介绍</p><h2 id="TOA，将客户端源IP插入到TCP-Option中"><a href="#TOA，将客户端源IP插入到TCP-Option中" class="headerlink" title="TOA，将客户端源IP插入到TCP Option中"></a>TOA，将客户端源IP插入到TCP Option中</h2><p>TOA是linux的一个内核模块，在tcp协议里面多添加了个option字段，LB把源ip和端口改为16进制然后加到里面一起传到后端RS，然后后端RS通过内核模块toa就可以让应用层程序获取真实的客户端地址。<br>相对来说这块介绍比较多，我这边就不介绍详细细节，可以参考 <a href="http://www.just4coding.com/blog/2015/11/16/toa/" target="_blank" rel="noopener">LVS FULLNAT模式下客户端真实地址的传递</a></p><p>这里说一下，Toa模块对系统的函数进行了修改，但是tcpdump之类的网络层是读取不到用户原始IP，需要应用层用getpeername函数进行自动识别。</p><h2 id="Proxy-Protocol，将客户端ip插入到TCP-payload中"><a href="#Proxy-Protocol，将客户端ip插入到TCP-payload中" class="headerlink" title="Proxy Protocol，将客户端ip插入到TCP payload中"></a>Proxy Protocol，将客户端ip插入到TCP payload中</h2><p>代理协议即 PROXY protocol,是haproxy的作者Willy Tarreau于2010年开发和设计的一个Internet协议，通过为tcp添加一个很小的头信息，来方便的传递客户端信息（协议栈、源IP、目的IP、源端口、目的端口等)，在网络情况复杂又需要获取客户IP时非常有用，具体协议设计如下</p><pre><code class="hljs text">Format - PROXY_STRING + single space + INET_PROTOCOL + single space + CLIENT_IP + single space + PROXY_IP + single space + CLIENT_PORT + single space + PROXY_PORT + &quot;\r\n&quot;IPV4 Sample - PROXY TCP4 198.51.100.22 203.0.113.7 35646 80\r\nIPv6 Sample - PROXY TCP6 2001:DB8::21f:5bff:febf:ce22:8a2e 2001:DB8::12f:8baa:eafc:ce29:6b2e 35646 80\r\n</code></pre><p>目前支持的后端应用</p><ul><li>Elastic Load Balancing, since July 2013, AWS’ Load-Balancer</li><li>haproxy, since 1.5-dev3, reverse-proxy load-balancer</li><li>nginx, since 1.5.12 in HTTP server client side only, Web server, HTTP + Mail reverve-proxy</li><li>Percona DB Server, since 5.6.25-73.0, DataBase server</li><li>postfix, since 2.10, SMTP MTA</li><li>apache HTTPD, web server, use the module myfixip, for both apache 2.2 and 2.4</li><li>varnish, HTTP reverse-proxy cache, since version 4.1 d0a2</li></ul><p>nginx配置参考，可以通过$proxy_protocol_addr获取用户的源ip</p><pre><code class="hljs text">server &#123;    listen 80 proxy_protocol;    location &#x2F; &#123;    add_header Content-Type text&#x2F;html;    return 200 $proxy_protocol_addr;    &#125;&#125;</code></pre><p>有个问题是，你开启了proxy protocol后，你就无法对RS进行直接访问测试了，可以说也是将LB和后端RS做了耦合，解决方案是，可以专门搭建一个代理服务器做proxy protocol来测试后端RS</p>]]></content>
     
