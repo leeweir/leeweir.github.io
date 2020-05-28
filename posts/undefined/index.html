@@ -19,7 +19,7 @@
   <meta name="description" content="嗜好太多，能力太小">
   <meta name="author" content="LeeWeir">
   <meta name="keywords" content="">
-  <title>云原生交付思考 - Weir&#39;s Note</title>
+  <title>Dockerfile ENV 的问题 - Weir&#39;s Note</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
@@ -125,8 +125,8 @@
               
                 <div class="mt-3 post-meta">
                   <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-                  <time datetime="2020-05-25 18:09">
-                    2020年5月25日 晚上
+                  <time datetime="2020-05-28 16:08">
+                    2020年5月28日 下午
                   </time>
                 </div>
               
@@ -136,7 +136,7 @@
                   
                   <span class="post-meta mr-2">
                     <i class="iconfont icon-chart"></i>
-                    127 字
+                    609 字
                   </span>
                 
 
@@ -146,7 +146,7 @@
                       <i class="iconfont icon-clock-fill"></i>
                     
                     
-                    1
+                    7
                      分钟
                   </span>
                 
@@ -175,7 +175,35 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <p>当 DevOps 遇上容器时，PPT 上往往有各种遐想的空间。实际在落地的过程中，因为公司已有成熟的发布系统，该发布系统是基于虚拟机时代的场景设计，发布主要是更新下代码和重启服务。为了兼容现有的发布模式，交付做的并不成功，和 k8s 的弹性理念存在冲突。所以我们需要打造一个以 k8s 为核心的新一代云原生 PaaS。</p>
+              <p>今天遇见一个小问题，大概是这样，我们的镜像是分层的，在 base 镜像里设置了一个 ENV，然后在后面一层镜像的时候 unset 掉了，但是实际运行的时候发现这个 ENV 一直存在，导致应用启动失败。花了一些时间查问题，其实本身也是 dockerfile 的设计，之前没有体系化的去看，所以这篇就记录下关于 ENV 的最佳实践。</p>
+<p><a href="https://docs.docker.com/engine/reference/builder/#env" target="_blank" rel="noopener">Dockerfile reference for the ENV instruction</a></p>
+<p>为了使新软件更易于运行，您可以使用 <code>ENV</code> 为你的容器更新 <code>PATH</code> 环境变量。例如，<code>ENV PATH /usr/local/nginx/bin:$PATH</code> 确保 <code>CMD [&quot;nginx&quot;]</code> 正常工作。</p>
+<p><code>ENV</code> 指令对于提供所需的环境变量也很有用，这些变量特定于您希望容器化的服务，例如 Postgres 的 PGDATA。</p>
+<p>最后，还可以使用 <code>ENV</code> 设置常用的版本号，以便更容易维护版本，如下面的示例所示：</p>
+<pre><code class="hljs dockerfile"><span class="hljs-keyword">ENV</span> PG_MAJOR <span class="hljs-number">9.3</span>
+<span class="hljs-keyword">ENV</span> PG_VERSION <span class="hljs-number">9.3</span>.<span class="hljs-number">4</span>
+<span class="hljs-keyword">RUN</span><span class="bash"> curl -SL http://example.com/postgres-<span class="hljs-variable">$PG_VERSION</span>.tar.xz | tar -xJC /usr/src/postgress &amp;&amp; …</span>
+<span class="hljs-keyword">ENV</span> PATH /usr/local/postgres-$PG_MAJOR/bin:$PATH</code></pre>
+
+<p>类似于在程序中具有常量变量（而不是硬编码的值），这种方法允许您更改单个 <code>ENV</code> 指令，以自动地在容器中加载软件的版本。。</p>
+<p>每条 <code>ENV</code> 行都会创建一个新的中间层，就像 <code>RUN</code> 命令一样。这意味着，即使您在以后的层中取消环境变量，它也仍将保留在该层中，并且其值也无法清掉. 您可以通过创建如下所示的 Dockerfile，然后对其进行构建来进行测试。</p>
+<pre><code class="hljs dockerfile"><span class="hljs-keyword">FROM</span> alpine
+<span class="hljs-keyword">ENV</span> ADMIN_USER=<span class="hljs-string">"mark"</span>
+<span class="hljs-keyword">RUN</span><span class="bash"> <span class="hljs-built_in">echo</span> <span class="hljs-variable">$ADMIN_USER</span> &gt; ./mark</span>
+<span class="hljs-keyword">RUN</span><span class="bash"> <span class="hljs-built_in">unset</span> ADMIN_USER</span></code></pre>
+
+<pre><code class="hljs shell"><span class="hljs-meta">$</span><span class="bash"> docker run --rm <span class="hljs-built_in">test</span> sh -c <span class="hljs-string">'echo $ADMIN_USER'</span></span>
+
+mark</code></pre>
+
+<p>为避免这种情况，并真正取消对环境变量的设置，可以使用带有 shell 命令的 <code>RUN</code> 命令，在一个单独的层中设置、使用和取消对环境变量的设置。你可以用 <code>;</code> 和 <code>&amp;&amp;</code> 来分隔命令。如果您使用第二种方法，并且其中一个命令失败，docker 构建也会失败。在 Linux Dockerfiles 中使用 <code>\</code> 作为行连续字符可以提高可读性。您还可以将所有命令放入一个 shell 脚本中，并让 <code>RUN</code> 命令直接运行该 shell 脚本。</p>
+<pre><code class="hljs dockerfile"><span class="hljs-keyword">FROM</span> alpine
+<span class="hljs-keyword">RUN</span><span class="bash"> <span class="hljs-built_in">export</span> ADMIN_USER=<span class="hljs-string">"mark"</span> \</span>
+<span class="bash">    &amp;&amp; <span class="hljs-built_in">echo</span> <span class="hljs-variable">$ADMIN_USER</span> &gt; ./mark \</span>
+<span class="bash">    &amp;&amp; <span class="hljs-built_in">unset</span> ADMIN_USER</span>
+<span class="hljs-keyword">CMD</span><span class="bash"> sh</span></code></pre>
+
+<pre><code class="hljs shell"><span class="hljs-meta">$</span><span class="bash"> docker run --rm <span class="hljs-built_in">test</span> sh -c <span class="hljs-string">'echo $ADMIN_USER'</span></span></code></pre>
 
             </article>
             <hr>
@@ -186,7 +214,9 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/cloud-native/">cloud native</a>
+                      <a class="hover-with-bg" href="/tags/cloud-native/">cloud-native</a>
+                    
+                      <a class="hover-with-bg" href="/tags/docker/">docker</a>
                     
                   </div>
                 
@@ -197,18 +227,12 @@
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/posts/undefined/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Dockerfile ENV 的问题</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </div>
                   <div class="post-next col-6">
                     
                     
-                      <a href="/posts/irq-not-balance/">
-                        <span class="hidden-mobile">关于网卡中断不均衡问题及其解决方案</span>
+                      <a href="/posts/cloud-native-delivery/">
+                        <span class="hidden-mobile">云原生交付思考</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -443,7 +467,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "云原生交付思考&nbsp;",
+        "Dockerfile ENV 的问题&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,

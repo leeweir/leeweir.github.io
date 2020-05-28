@@ -150,6 +150,42 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/posts/undefined/">Dockerfile ENV 的问题</a>
+
+      <a href="/posts/undefined/" class="index-excerpt">
+        
+        
+          
+        
+        <div>今天遇见一个小问题，大概是这样，我们的镜像是分层的，在 base 镜像里设置了一个 ENV，然后在后面一层镜像的时候 unset 掉了，但是实际运行的时候发现这个 ENV 一直存在，导致应用启动失败。花了一些时间查问题，其实本身也是 dockerfile 的设计，之前没有体系化的去看，所以这篇就记录下关于 ENV 的最佳实践。
+Dockerfile reference for the ENV in</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-05-28
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/cloud-native/">cloud-native</a>
+            
+              <a href="/tags/docker/">docker</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a class="index-header" href="/posts/cloud-native-delivery/">云原生交付思考</a>
 
       <a href="/posts/cloud-native-delivery/" class="index-excerpt">
@@ -484,44 +520,6 @@ Kubernetes 运行一组控制器，它们负责处理日常任务，以确保集
             <i class="iconfont icon-tags"></i>
             
               <a href="/tags/tcp/">tcp</a>
-            
-          </div>
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/posts/two-sum/">two-sum</a>
-
-      <a href="/posts/two-sum/" class="index-excerpt">
-        
-        
-          
-        
-        <div>最近刚好在学golang，所以就拿简单的LeetCode提来练习练习，顺便把结果分享下
-题目描述：
-给定一个整数数组nums和一个目标值target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
-你可以假设每种输入只会对应一个答案。但是，你不能重复利用这个数组中同样的元素。
-示例：
-给定 nums &#x3D; [2, 7, 11, 15], target &#x3D; 9</div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2019-02-14
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/golang/">golang</a>
             
           </div>
         
