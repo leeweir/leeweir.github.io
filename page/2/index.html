@@ -150,6 +150,39 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/posts/how-many-connections-can-a-server-send/">一台服务器可以发起多少个连接</a>
+
+      <a href="/posts/how-many-connections-can-a-server-send/" class="index-excerpt">
+        
+        
+          
+        
+        <div>最近好多同学纠结这个问题，拿出以前分享的ppt发个博客。总结来说，发起多少连接不受源端口限制，只要保证TCP四元组唯一，那么就可以继续建立连接。</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-04-19
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/tcp/">tcp</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a class="index-header" href="/posts/two-sum/">two-sum</a>
 
       <a href="/posts/two-sum/" class="index-excerpt">
@@ -472,41 +505,6 @@ SYN Flood攻击利用的是IPv4中TCP协议的三次握手(Three-Way Handshake)�
               <a href="/tags/sre/">sre</a>
             
               <a href="/tags/tcp/">tcp</a>
-            
-          </div>
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/posts/cert-chain/">谈谈证书链的问题</a>
-
-      <a href="/posts/cert-chain/" class="index-excerpt">
-        
-        
-          
-        
-        <div>这两天公司遇到影响比较大的故障，是因为服务端证书给的证书链上配置的中间证书错了，导致一部分android用户访问失败。完整的证书内容一般分为3级，服务端证书-中间证书-根证书。其中Root CA是信任锚点，一条证书链中只能有一个。Intermediate CA可以有多个。Root CA通常不直接签发用户证书，而是签发Intermediate CA，由Intermediate CA来签发终用户书。它</div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2018-03-09
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/sre/">sre</a>
-            
-              <a href="/tags/https/">https</a>
             
           </div>
         
