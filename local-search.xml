@@ -8,7 +8,7 @@
     <link href="/posts/cilium/"/>
     <url>/posts/cilium/</url>
     
-    <content type="html"><![CDATA[<p>这篇 PPT 是 SUSE 工程师分享的，蛮全面的介绍了下 cilium 的各种优势和场景：</p><ul><li>It makes disadvantages of iptables disappear. And always gets the best from the Linux kernel.</li><li>Cluster Mesh / multi-cluster.</li><li>Makes Istio faster.</li><li>Offers L7 API Aware filtering as a Kubernetes resource.</li><li>Integrates with the other popular CNI plugins – Calico, Flannel, Weave, Lyft, AWS CNI.</li></ul><object data="./Cilium_FOSDEM_2020.pdf" type="application/pdf" width="100%" height="877px">]]></content>
+    <content type="html"><![CDATA[<h2 id="Why-Cilium-is-awesome"><a href="#Why-Cilium-is-awesome" class="headerlink" title="Why Cilium is awesome?"></a>Why Cilium is awesome?</h2><ul><li>It makes disadvantages of iptables disappear. And always gets the best from the Linux kernel.</li><li>Cluster Mesh / multi-cluster.</li><li>Makes Istio faster.</li><li>Offers L7 API Aware filtering as a Kubernetes resource.</li><li>Integrates with the other popular CNI plugins – Calico, Flannel, Weave, Lyft, AWS CNI.</li></ul><object data="./Cilium_FOSDEM_2020.pdf" type="application/pdf" width="100%" height="877px">]]></content>
     
     
     
