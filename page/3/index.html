@@ -150,6 +150,40 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/posts/common-local-dns/">测试几个公共 DNS 的性能</a>
+
+      <a href="/posts/common-local-dns/" class="index-excerpt">
+        
+        
+          
+        
+        <div>最近CloudFlare推出了自己的免费DNS解析器：1.1.1.1，可以说CloudFlare是我比较喜欢的一个公司之一，当时在想具体性能怎么样，所以找了个工具本地测试了下。Shell脚本测试公共dns的性能，可以测试各个dns server的解析速度，标准输出如下：
+&#123; dnsperftest &#125; master » bash ./dnstest.sh |sort -k 22</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2018-04-08
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/dns/">dns</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a class="index-header" href="/posts/syn-cookie-problem/">谈谈 syn cookie 的问题</a>
 
       <a href="/posts/syn-cookie-problem/" class="index-excerpt">
@@ -493,47 +527,11 @@ TOA，将客户端源IP插入到TC</div>
     </div>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/posts/django-singal-post-update/">django singal post update</a>
-
-      <a href="/posts/django-singal-post-update/" class="index-excerpt">
-        
-        
-          
-        
-        <div>前不久一个新人问我如何在 django 的 singal 中实现 post update，可是默认 queryset 的 update 是直接调用 sql 的，不会使用 django orm 中的 save 方法，signal 中默认只有 post save 的方法。最后大致实现如下:
-updating-multiple-objects-at-once
-
-update() is converted</div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2018-01-30
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/python/">python</a>
-            
-          </div>
-        
-      </div>
-    </div>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/2/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+      <a class="extend prev" rel="prev" href="/page/2/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
   

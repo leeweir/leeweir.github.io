@@ -19,7 +19,7 @@
   <meta name="description" content="嗜好太多，能力太小">
   <meta name="author" content="LeeWeir">
   <meta name="keywords" content="">
-  <title>Archives - Weir&#39;s Note</title>
+  <title>Weir&#39;s Note</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
@@ -48,7 +48,7 @@
 
 
 <body>
-  <header style="height: 40vh;">
+  <header style="height: 100vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -125,6 +125,10 @@
           </div>
 
           
+            <div class="scroll-down-bar">
+              <i class="iconfont icon-arrowdown"></i>
+            </div>
+          
         </div>
       </div>
     </div>
@@ -134,33 +138,63 @@
     
       <div class="container nopadding-md">
         <div class="py-5" id="board"
-          >
+          style=margin-top:0>
           
           <div class="container">
             <div class="row">
               <div class="col-12 col-md-10 m-auto">
                 
 
-<div class="list-group">
-  <p class="h4">31 posts in total.</p>
-  <hr>
-  
+
+  <div class="row mx-auto index-card">
     
-      
-      <p class="h5">2019</p>
     
-    <a href="/posts/two-sum/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">two-sum</span>
-      <span style="float: right;">02-14</span>
-    </a>
+    <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/posts/django-singal-post-update/">django singal post update</a>
+
+      <a href="/posts/django-singal-post-update/" class="index-excerpt">
+        
+        
+          
+        
+        <div>前不久一个新人问我如何在 django 的 singal 中实现 post update，可是默认 queryset 的 update 是直接调用 sql 的，不会使用 django orm 中的 save 方法，signal 中默认只有 post save 的方法。最后大致实现如下:
+updating-multiple-objects-at-once
+
+update() is converted</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2018-01-30
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/python/">python</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <a class="extend prev" rel="prev" href="/page/3/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+    </span>
+  </nav>
   
-    
-    <a href="/posts/dns-cache-nscd/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">DNS 缓存介绍: NSCD</span>
-      <span style="float: right;">02-02</span>
-    </a>
-  
-</div>
+  <script>
+    for (ele of document.getElementById("pagination").getElementsByTagName("a")) {
+      ele.href += '#board';
+    }
+  </script>
 
 
 
@@ -312,7 +346,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "Archive&nbsp;",
+        "Write the Code. Change the World.&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
