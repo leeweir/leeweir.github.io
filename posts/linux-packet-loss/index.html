@@ -177,7 +177,7 @@
             <article class="markdown-body">
               <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近一直在排查一些网络的问题，比如 connect timeout 、read timeout 以及一些丢包的问题，刚好想整理一些东西，方便和团队内及开发分享。</p>
 <p>我们先看下 Linux 系统接收数据包的过程：</p>
-
+<img src="/posts/linux-packet-loss/1.png" srcset="/img/loading.gif" class="" title="This is an image">
 
 <ol>
 <li>网卡收到数据包。</li>
@@ -213,7 +213,7 @@ Iface      MTU    RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
 eth0      1500 9528312730      0      0 0      8803615650      0      0      0 BMRU</code></pre>
 
 <h2 id="Ring-Buffer-溢出"><a href="#Ring-Buffer-溢出" class="headerlink" title="Ring Buffer 溢出"></a>Ring Buffer 溢出</h2><p>如果硬件或者驱动没有问题，一般网卡丢包是因为设置的缓存区（ring buffer）太小。当网络数据包到达（生产）的速率快于内核处理（消费）的速率时， Ring Buffer 很快会被填满，新来的数据包将被丢弃。</p>
-
+<img src="/posts/linux-packet-loss/2.png" srcset="/img/loading.gif" class="" title="This is an image">
 
 <p>通过 <code>ethtool</code> 或 <code>/proc/net/dev</code> 可以查看因Ring Buffer满而丢弃的包统计，在统计项中以fifo标识：</p>
 <pre><code class="hljs text"># ethtool -S eth0|grep rx_fifo
@@ -271,7 +271,7 @@ TX:     4096</code></pre>
 </ul>
 {% asset_img 5.png This is an image %}
 
-<h2 id="半连接队列和全连接队列溢出"><a href="#半连接队列和全连接队列溢出" class="headerlink" title="半连接队列和全连接队列溢出"></a>半连接队列和全连接队列溢出</h2><p>之前有个 <a href="https://leeweir.github.io/2019/10/21/%E4%B8%80%E4%B8%AAconnect-timeout%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/" target="_blank" rel="noopener">connect timeout 的 case</a> ，这篇博客里，我也详细介绍了如何去查看半连接队列和全连接队列，包括如何去优化，这里我不展开写。<br>但是补充一点，在半连接满的情况下，若启用syncookie机制，并不会直接丢弃 SYN 包，而是回复带有 syncookie 的 SYN+ACK 包，设计的目的是防范 SYN Flood 造成正常请求服务不可用。 syncookie 之前也有一篇博客分享，参考 <a href="https://leeweir.github.io/2018/03/23/%E8%B0%88%E8%B0%88syn-cookie%E7%9A%84%E9%97%AE%E9%A2%98/" target="_blank" rel="noopener">谈谈 syn-cookie 的问题</a>.</p>
+<h2 id="半连接队列和全连接队列溢出"><a href="#半连接队列和全连接队列溢出" class="headerlink" title="半连接队列和全连接队列溢出"></a>半连接队列和全连接队列溢出</h2><p>之前有个 <a href="https://leeweir.github.io/2019/10/21/%E4%B8%80%E4%B8%AAconnect-timeout%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/">connect timeout 的 case</a> ，这篇博客里，我也详细介绍了如何去查看半连接队列和全连接队列，包括如何去优化，这里我不展开写。<br>但是补充一点，在半连接满的情况下，若启用syncookie机制，并不会直接丢弃 SYN 包，而是回复带有 syncookie 的 SYN+ACK 包，设计的目的是防范 SYN Flood 造成正常请求服务不可用。 syncookie 之前也有一篇博客分享，参考 <a href="https://leeweir.github.io/2018/03/23/%E8%B0%88%E8%B0%88syn-cookie%E7%9A%84%E9%97%AE%E9%A2%98/">谈谈 syn-cookie 的问题</a>.</p>
 <h2 id="PAWS"><a href="#PAWS" class="headerlink" title="PAWS"></a>PAWS</h2><p>PAWS 全名 Protect Againest Wrapped Sequence numbers ，目的是解决在高带宽下， TCP 序列号在一次会话中可能被重复使用而带来的问题。</p>
 {% asset_img 3.png This is an image %}
 
@@ -349,7 +349,7 @@ containerd 93829 [031] 951470.340306: skb:kfree_skb: skbaddr&#x3D;0xffff8827bfce
                    f908d __GI___libc_connect (&#x2F;usr&#x2F;lib64&#x2F;libc-2.17.so)
                   130ebe __nscd_open_socket (&#x2F;usr&#x2F;lib64&#x2F;libc-2.17.so)</code></pre>
 
-<p>第三个是tcpdrop，之前我也有一篇 <a href="https://leeweir.github.io/2019/10/25/%E8%AF%91-Linux-bcc-eBPF-tcpdrop/" target="_blank" rel="noopener">博客介绍</a>, 它显示了源包和目标包的详细信息，以及 TCP 会话状态(来自内核)、TCP 标志(来自包 TCP 报头)和导致这次丢包的内核堆栈跟踪。</p>
+<p>第三个是tcpdrop，之前我也有一篇 <a href="https://leeweir.github.io/2019/10/25/%E8%AF%91-Linux-bcc-eBPF-tcpdrop/">博客介绍</a>, 它显示了源包和目标包的详细信息，以及 TCP 会话状态(来自内核)、TCP 标志(来自包 TCP 报头)和导致这次丢包的内核堆栈跟踪。</p>
 <pre><code class="hljs text">TIME     PID    IP SADDR:SPORT          &gt; DADDR:DPORT          STATE (FLAGS)
 05:46:07 82093  4  10.74.40.245:50010   &gt; 10.74.40.245:58484   ESTABLISHED (ACK)
     tcp_drop+0x1
@@ -387,11 +387,11 @@ containerd 93829 [031] 951470.340306: skb:kfree_skb: skbaddr&#x3D;0xffff8827bfce
     xen_evtchn_do_upcall+0x30
     xen_hvm_callback_vector+0x1af</code></pre>
 
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><img src="/posts/linux-packet-loss/4.jpg" srcset="/img/loading.gif" class="" title="This is an image">
 
 <p>linux 网络协议栈太深，每一层都有可能出现各种各样的问题，我们需要了解这些原理，同时利用好工具去排查这些问题。同时我们在优化的时候，不要盲目的看别人的优化结果，更重要的是体系化的去了解 linux 协议栈的实现，只有知其所以然，才能结合实际业务特点，得出最合理的优化配置。</p>
 <p>最后我按照倪鹏飞之前的优化，整理了一个表格，方便参考（数值仅供参考，具体配置还需要结合实际场景来调整）：</p>
-
+<img src="/posts/linux-packet-loss/6.png" srcset="/img/loading.gif" class="" title="This is an image">
 
             </article>
             <hr>

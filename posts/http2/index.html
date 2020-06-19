@@ -204,9 +204,9 @@
 <h2 id="HTTP-2的新特性"><a href="#HTTP-2的新特性" class="headerlink" title="HTTP/2的新特性"></a>HTTP/2的新特性</h2><p>因为HTTP/1.x的问题，人们提出了各种解决方案。比如希望复用连接的长链接/http long-polling/websocket等等，解决HOLB的Domain Sharding（域名分片）/inline资源/css sprite等等。</p>
 <p>不过以上优化都绕开了协议，直到谷歌推出SPDY，才算是正式改造HTTP协议本身。降低延迟，压缩header等等，SPDY的实践证明了这些优化的效果，也最终带来HTTP/2的诞生。</p>
 <h3 id="新的二进制格式（Binary-Format）"><a href="#新的二进制格式（Binary-Format）" class="headerlink" title="新的二进制格式（Binary Format）"></a>新的二进制格式（Binary Format）</h3><p>http1.x诞生的时候是明文协议，其格式由三部分组成：start line（request line或者status line），header，body。要识别这3部分就要做协议解析，http1.x的解析是基于文本。基于文本协议的格式解析存在天然缺陷，文本的表现形式有多样性，要做到健壮性考虑的场景必然很多，二进制则不同，只认0和1的组合。基于这种考虑http2.0的协议解析决定采用二进制格式，实现方便且健壮。</p>
-
+<img src="/posts/http2/1.png" srcset="/img/loading.gif" class="" title="This is an image">
 <p>http2的格式定义十分高效且精简。length定义了整个frame的大小，type定义frame的类型（一共10种），flags用bit位定义一些重要的参数，stream id用作流控制，payload就是request的正文。</p>
-
+<img src="/posts/http2/2.png" srcset="/img/loading.gif" class="" title="This is an image">
 
 <h3 id="Header压缩"><a href="#Header压缩" class="headerlink" title="Header压缩"></a>Header压缩</h3><p>http1.x的header由于cookie和user agent很容易膨胀，而且每次都要重复发送。</p>
 <p>http2.0使用encoder来减少需要传输的header大小，通讯双方各自cache一份header fields表，既避免了重复header的传输，又减小了需要传输的大小。高效的压缩算法可以很大的压缩header，减少发送包的数量从而降低延迟。</p>
@@ -223,12 +223,12 @@
 <p>翻译下，stream就是在HTTP/2连接上的双向帧序列。每个http request都会新建自己的stream，response在同一个stream上返回。</p>
 <p>多路复用（MultiPlexing），即连接共享。之所以可以复用，是因为每个stream高度独立，堵塞的stream不会影响其它stream的处理。一个连接上可以有多个stream，每个stream的frame可以随机的混杂在一起，接收方可以根据stream id将frame再归属到各自不同的request里面。</p>
 <h3 id="流量控制（Flow-Control）"><a href="#流量控制（Flow-Control）" class="headerlink" title="流量控制（Flow Control）"></a>流量控制（Flow Control）</h3><p>类似TCP协议通过sliding window的算法来做流量控制，http2.0使用 WINDOW_UPDATE frame 来做流量控制。每个stream都有流量控制，这保证了数据接收方可以只让自己需要的数据被传输。</p>
-
+<img src="/posts/http2/3.png" srcset="/img/loading.gif" class="" title="This is an image">
 
 <h3 id="流优先级（Stream-Priority）"><a href="#流优先级（Stream-Priority）" class="headerlink" title="流优先级（Stream Priority）"></a>流优先级（Stream Priority）</h3><p>每个流可以设置优先级。优先级的目标是允许终端高速对端（当对端处理并发流时）怎么分配资源。</p>
 <p>更重要的是，当传输能力有限时，优先级可以用来挑选哪些流（高优先级）优先传输——这是优化浏览器渲染的关键，即服务端负责设置优先级，使重要的资源优先加载，加速页面渲染。</p>
 <h3 id="Server-Push"><a href="#Server-Push" class="headerlink" title="Server Push"></a>Server Push</h3><p>Server Push即服务端能通过push的方式将客户端需要的内容预先推送过去，也叫“cache push”。</p>
-
+<img src="/posts/http2/4.png" srcset="/img/loading.gif" class="" title="This is an image">
 
 <p>参考:<br><a href="https://imququ.com/post/http2-resource.html" target="_blank" rel="noopener">https://imququ.com/post/http2-resource.html</a><br><a href="http://www.alloyteam.com/2016/07/httphttp2-0spdyhttps-reading-this-is-enough/" target="_blank" rel="noopener">http://www.alloyteam.com/2016/07/httphttp2-0spdyhttps-reading-this-is-enough/</a></p>
 

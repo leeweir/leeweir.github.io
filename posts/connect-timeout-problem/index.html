@@ -176,10 +176,10 @@
             
             <article class="markdown-body">
               <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>有用户反馈在dubbo的应用发布后，过几分钟之后，调用方会出现大量的connectTimeout。当时在服务端容器上进行了抓包，看到在故障期间，客户端发了syn，但是服务端没有任何响应。</p>
-
+<img src="/posts/connect-timeout-problem/1.png" srcset="/img/loading.gif" class="" title="This is an image">
 
 <h2 id="分析问题"><a href="#分析问题" class="headerlink" title="分析问题"></a>分析问题</h2><p>正常的TCP三次握手：</p>
-
+<img src="/posts/connect-timeout-problem/2.png" srcset="/img/loading.gif" class="" title="This is an image">
 
 <ul>
 <li><p>客户端发送syn给服务端发起握手</p>
@@ -194,7 +194,7 @@
 3220 SYNs to LISTEN sockets dropped</code></pre>
 
 <h3 id="syn队列和accept队列"><a href="#syn队列和accept队列" class="headerlink" title="syn队列和accept队列"></a>syn队列和accept队列</h3><p>这里先解释下syn队列和accept队列：</p>
-
+<img src="/posts/connect-timeout-problem/3.png" srcset="/img/loading.gif" class="" title="This is an image">
 
 <p>上图结合三次握手来说看</p>
 <ul>
@@ -207,11 +207,11 @@
 </ul>
 <p>我们可以大概了解了syn队列和accept队列，那再看上面的问题，overflowed代表accept队列溢出，droped代表syn队列溢出，发现 3220 SYNs to LISTEN sockets dropped，这个就是代表syn队列溢出吗？</p>
 <h3 id="overflowed和dropped为什么一样多"><a href="#overflowed和dropped为什么一样多" class="headerlink" title="overflowed和dropped为什么一样多"></a>overflowed和dropped为什么一样多</h3><p>这里又引出一个问题，可以看到overflowed和dropped竟然一样多，翻看<a href="https://elixir.bootlin.com/linux/v4.14.67/source/net/ipv4/tcp_ipv4.c#L1414" target="_blank" rel="noopener">内核源码</a>:</p>
-
+<img src="/posts/connect-timeout-problem/4.png" srcset="/img/loading.gif" class="" title="This is an image">
 
 <p>可以看到overflow的时候，tcp dropped也会增加，也就是dropped一定大于等于overflowed。这样看，overflowed和dropped是一样的，只能说明accept队列溢出了，而syn队列溢出为0（3220-3220）。</p>
 <h3 id="进一步分析"><a href="#进一步分析" class="headerlink" title="进一步分析"></a>进一步分析</h3><p>但是按照syn队列和accept队列的设计，accept队列满了应该不影响syn响应，即不影响三次握手。带着这个疑问我们再次翻看了<a href="https://elixir.bootlin.com/linux/v4.14.67/source/net/ipv4/tcp_input.c#L6335" target="_blank" rel="noopener">内核源码</a></p>
-
+<img src="/posts/connect-timeout-problem/5.png" srcset="/img/loading.gif" class="" title="This is an image">
 
 <p>可以看到在建连的时候，会判断accept队列，如果accept队列满了，就会drop，即把这个syn包丢掉了。到这里，基本上原因已经查明了。</p>
 <h3 id="如何优化"><a href="#如何优化" class="headerlink" title="如何优化"></a>如何优化</h3><p>按照之前的分析，大概定位到是因为accept队列满了，我们通过ss -lnt查看下：</p>

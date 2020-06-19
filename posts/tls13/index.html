@@ -177,21 +177,21 @@
             <article class="markdown-body">
               <p>openssl1.1.1 final正式发布后，准备在线上开始灰度了。虽然之前有一些了解，但是其实没有准确的认知，所以需要再好好的分析一下：</p>
 <h1 id="大体上的区别"><a href="#大体上的区别" class="headerlink" title="大体上的区别"></a>大体上的区别</h1><p>我们先看下tls1.3和tls1.2有什么区别：<br>tls1.3：</p>
-
+<img src="/posts/tls13/tls1-3-cap.jpg" srcset="/img/loading.gif" class="" title="This is an image">
 
 <p>tls1.2：</p>
-
+<img src="/posts/tls13/tls1-2-cap.jpg" srcset="/img/loading.gif" class="" title="This is an image">
 
 <p>从这两张图就可以明显的看出tls1.3和tls1.2的数据包的不同，在tls1.3中，自从ServerHello之后全是Application Data了，甚至一度怀疑是不是wireshark这个软件是不是实现有问题。</p>
 <p>我们看下<a href="https://tools.ietf.org/html/rfc8446" target="_blank" rel="noopener">tls1.3 rfc</a>，如下整理了下<br>tls1.3完整握手:</p>
-
+<img src="/posts/tls13/tls1-3.jpg" srcset="/img/loading.gif" class="" title="This is an image">
 
 <p>tls1.2完整握手：</p>
-
+<img src="/posts/tls13/tls1-2.jpg" srcset="/img/loading.gif" class="" title="This is an image">
 
 <p>通过tls1.3和tls1.2的握手流程图对比，可以明显的看见tls1.3的握手流程比tls1.2的要少两次握手。虽然握手少了两次，但是像服务器证书这些必要的信息并没有减少提供，只是说在tls1.3中通过ClientHello和ServerHello这两步信息交换，就已经完成了tls1.2上的ServerKeyExchange和ClientKeyExchange这两个密钥交换的操作，在tls1.3的ServerHello之后的信息都已经走了加密通道。</p>
 <h1 id="解析ClientHello"><a href="#解析ClientHello" class="headerlink" title="解析ClientHello"></a>解析ClientHello</h1><p>先看一下使用openssl进行tls1.3握手的ClientHello的数据包结构：</p>
-
+<img src="/posts/tls13/tls1-3-clienthello.jpg" srcset="/img/loading.gif" class="" title="This is an image">
 
 <p>看一下rfc中对ClientHello的结构定义：</p>
 <pre><code class="hljs c">uint16 ProtocolVersion;
@@ -212,7 +212,7 @@
 <a id="more"></a>
 
 <p>现在在看一下tls1.2的ClientHello数据包：</p>
-
+<img src="/posts/tls13/tls1-2-clienthello.jpg" srcset="/img/loading.gif" class="" title="This is an image">
 
 <p>在这里我首先注意到的是两个Version后面的值，这两个值tls1.3和tls1.2是没有区别的，那么又是如何区分出是tls1.2还tls1.3的clientHello呢？在tls1.3的rfc中有说明：</p>
 <pre><code class="hljs text">The &quot;supported_versions&quot; ClientHello extension can be used to
@@ -220,7 +220,7 @@
       legacy_version field of the ClientHello.</code></pre>
 
 <p>在区分出tls1.3或tls1.2的数据包是通过supported_versions这个扩展字段中区分出来的:</p>
-
+<img src="/posts/tls13/support-versions.jpg" srcset="/img/loading.gif" class="" title="This is an image">
 
 <p>tls1.3的ClientHello增加了很多的扩展，这些扩展先暂时放一边，看一下我感觉最差异的地方：Cipher Suites。</p>
 <h2 id="Cipher-Suites"><a href="#Cipher-Suites" class="headerlink" title="Cipher Suites"></a>Cipher Suites</h2><p>tls1.3现在支持的Cipher_Suites如下：</p>
@@ -254,7 +254,7 @@ key_share</code></pre>
 
 <p>在上面的的key_share中选用x25519DH参数。还有可以使用类似secp256r1、secp384r1、secp521r1的DH参数</p>
 <h1 id="解析ServerHello信息"><a href="#解析ServerHello信息" class="headerlink" title="解析ServerHello信息"></a>解析ServerHello信息</h1><p>先看一下openssl响应的ServerHello信息：</p>
-
+<img src="/posts/tls13/tls1-3-serverhello.jpg" srcset="/img/loading.gif" class="" title="This is an image">
 
 <p>在这里可以可以看到服务器端选择了TLS_AES_256_GCM_SHA384这个加密套件，并且只返回了key_share这个扩展信息，并没有pre_shared_key扩展，因此根据rfc文档，那么服务端选择的就是(EC)DHE ，</p>
 <p>在看一眼key_share中的结构,和ClientHello中的key_share结构是一致的，到这里，Client和Server已经完成了密钥交换了，剩下的信息就全部通过加密通道进行传输了。</p>
