@@ -261,7 +261,7 @@ sharedInformer := cache.NewSharedInformer(lw, &amp;api.Pod&#123;&#125;, resyncPe
 workqueue.NewRateLimitingQueue(workqueue.DefaultControllerRateLimiter())</code></pre>
 
 <p>Workqueue 提供一个便利的函数去管理这些 keys。下面这个图描述 Workqueue 里 key 的生命周期：</p>
-
+<img src="/posts/a-deep-dive-into-kubernetes-controllers/key-lifecicle-workqueue.png" srcset="/img/loading.gif" class="" title="This is an image">
 
 <p>在处理事件失败的情况下，控制器调用 AddRateLimited() 函数，将它的 key 退回到 Workqueue，以便稍后使用预定义的重试次数继续工作。反之，如果进程成功，则可以通过调用 Forget() 函数从 Workqueue 中删除 key。但是，该函数只会阻止 Workqueue 跟踪事件的历史。为了从 Workqueue 中完全删除事件，控制器必须触发 Done() 函数。</p>
 <p>因此，Workqueue 可以处理来自缓存的通知，但问题是，控制器何时应该启动 workers 处理 Workqueue?为了获得最新的状态，控制器应该等待直到缓存完全同步，这有两个原因：</p>

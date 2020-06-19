@@ -282,9 +282,9 @@ f107894f 0000e7f9 00000181 00000000 00000000 00000000 00000000 00000000 00000000
 <p>其中： 每一行代表每个 CPU 核的状态统计，从 CPU0 依次往下； 每一列代表一个 CPU 核的各项统计：第一列代表中断处理程序收到的包总数；第二列即代表由于 netdev_max_backlog 队列溢出而被丢弃的包总数。</p>
 <p>可以看到 CPU10 有大量的丢包现象（第二列数据）。</p>
 <p>对 softnet_stat 数据我们做了一些监控，可以看到的定期会有丢包的现象。</p>
+<img src="/posts/irq-not-balance/drop_monitor.png" srcset="/img/loading.gif" class="" title="This is an image">
 
-
-<p>关于丢包，扩展阅读可以看我之前一篇博客 <a href="https://leeweir.github.io/2019/10/28/Linux-%E4%B8%A2%E5%8C%85%E9%82%A3%E4%BA%9B%E4%BA%8B/" target="_blank" rel="noopener">linux 丢包那些事</a></p>
+<p>关于丢包，扩展阅读可以看我之前一篇博客 <a href="https://leeweir.github.io/2019/10/28/Linux-%E4%B8%A2%E5%8C%85%E9%82%A3%E4%BA%9B%E4%BA%8B/">linux 丢包那些事</a></p>
 <h2 id="如何处理"><a href="#如何处理" class="headerlink" title="如何处理"></a>如何处理</h2><h3 id="netdev-max-backlog-调优"><a href="#netdev-max-backlog-调优" class="headerlink" title="netdev_max_backlog 调优"></a>netdev_max_backlog 调优</h3><p>netdev_max_backlog 是内核从 NIC 收到包后，交由协议栈（如 IP、TCP ）处理之前的缓冲队列。</p>
 <p>从这次现象看，因为超越了设定的 netdev_max_backlog 值，导致数据包被丢弃。netdev_max_backlog 的默认值是 1000，我们可以修改内核参数来调优：</p>
 <pre><code class="hljs text">sysctl -w net.core.netdev_max_backlog&#x3D;2000</code></pre>
