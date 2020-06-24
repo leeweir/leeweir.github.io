@@ -181,7 +181,7 @@
 
 About 68.27% of the values lie within 1 standard deviation of the mean. Similarly, about 95.45% of the values lie within 2 standard deviations of the mean. Nearly all (99.73%) of the values lie within 3 standard deviations of the mean.</code></pre>
 
- 
+ <img src="/posts/skyline-timeseries-anomaly-detection/3sigma.png" srcset="/img/loading.gif" class="">
 
 <p>简单来说就是：在normal distribution（正态分布）中，99.73%的数据都在偏离mean 3个σ (standard deviation 标准差) 的范围内。如果某些datapoint到mean的距离超过这个范围，则认为是异常的。Skyline初始内置的7个算法几乎都是基于该理论的：</p>
 <h1 id="stddev-from-average"><a href="#stddev-from-average" class="headerlink" title="stddev_from_average"></a>stddev_from_average</h1><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">stddev_from_average</span><span class="hljs-params">(timeseries)</span>:</span>
