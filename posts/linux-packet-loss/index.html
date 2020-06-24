@@ -146,7 +146,7 @@
                       <i class="iconfont icon-clock-fill"></i>
                     
                     
-                    46
+                    45
                      分钟
                   </span>
                 
@@ -177,8 +177,7 @@
             <article class="markdown-body">
               <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近一直在排查一些网络的问题，比如 connect timeout 、read timeout 以及一些丢包的问题，刚好想整理一些东西，方便和团队内及开发分享。</p>
 <p>我们先看下 Linux 系统接收数据包的过程：</p>
-<img src="/posts/linux-packet-loss/1.png" srcset="/img/loading.gif" class="" title="This is an image">
-
+<p><img src="1.png" srcset="/img/loading.gif" alt="图 1 "></p>
 <ol>
 <li>网卡收到数据包。</li>
 <li>将数据包从网卡硬件缓存转移到服务器内存中。</li>
@@ -213,8 +212,7 @@ Iface      MTU    RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
 eth0      1500 9528312730      0      0 0      8803615650      0      0      0 BMRU</code></pre>
 
 <h2 id="Ring-Buffer-溢出"><a href="#Ring-Buffer-溢出" class="headerlink" title="Ring Buffer 溢出"></a>Ring Buffer 溢出</h2><p>如果硬件或者驱动没有问题，一般网卡丢包是因为设置的缓存区（ring buffer）太小。当网络数据包到达（生产）的速率快于内核处理（消费）的速率时， Ring Buffer 很快会被填满，新来的数据包将被丢弃。</p>
-<img src="/posts/linux-packet-loss/2.png" srcset="/img/loading.gif" class="" title="This is an image">
-
+<p><img src="2.png" srcset="/img/loading.gif" alt="图 2 "></p>
 <p>通过 <code>ethtool</code> 或 <code>/proc/net/dev</code> 可以查看因Ring Buffer满而丢弃的包统计，在统计项中以fifo标识：</p>
 <pre><code class="hljs text"># ethtool -S eth0|grep rx_fifo
 rx_fifo_errors: 0
@@ -269,12 +267,10 @@ TX:     4096</code></pre>
 <li><p>写缓冲区，缓存了要发出去的数据。如果写缓冲区已满，应用程序的写操作就会阻塞。</p>
 </li>
 </ul>
-{% asset_img 5.png This is an image %}
-
+<p><img src="5.png" srcset="/img/loading.gif" alt="图 5 "></p>
 <h2 id="半连接队列和全连接队列溢出"><a href="#半连接队列和全连接队列溢出" class="headerlink" title="半连接队列和全连接队列溢出"></a>半连接队列和全连接队列溢出</h2><p>之前有个 <a href="https://leeweir.github.io/2019/10/21/%E4%B8%80%E4%B8%AAconnect-timeout%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/">connect timeout 的 case</a> ，这篇博客里，我也详细介绍了如何去查看半连接队列和全连接队列，包括如何去优化，这里我不展开写。<br>但是补充一点，在半连接满的情况下，若启用syncookie机制，并不会直接丢弃 SYN 包，而是回复带有 syncookie 的 SYN+ACK 包，设计的目的是防范 SYN Flood 造成正常请求服务不可用。 syncookie 之前也有一篇博客分享，参考 <a href="https://leeweir.github.io/2018/03/23/%E8%B0%88%E8%B0%88syn-cookie%E7%9A%84%E9%97%AE%E9%A2%98/">谈谈 syn-cookie 的问题</a>.</p>
 <h2 id="PAWS"><a href="#PAWS" class="headerlink" title="PAWS"></a>PAWS</h2><p>PAWS 全名 Protect Againest Wrapped Sequence numbers ，目的是解决在高带宽下， TCP 序列号在一次会话中可能被重复使用而带来的问题。</p>
-{% asset_img 3.png This is an image %}
-
+<p><img src="3.png" srcset="/img/loading.gif" alt="图 3 "></p>
 <p>如上图所示，客户端发送的序列号为 A 的数据包 A1 因某些原因在网络中“迷路”，在一定时间没有到达服务端，客户端超时重传序列号为 A 的数据包 A2 ，接下来假设带宽足够，传输用尽序列号空间，重新使用 A ，此时服务端等待的是序列号为 A 的数据包 A3 ，而恰巧此时前面“迷路”的 A1 到达服务端，如果服务端仅靠序列号A就判断数据包合法，就会将错误的数据传递到用户态程序，造成程序异常。</p>
 <p>PAWS 要解决的就是上述问题，它依赖于 timestamp 机制，理论依据是：在一条正常的 TCP 流中，按序接收到的所有 TCP 数据包中的 timestamp 都应该是单调非递减的，这样就能判断那些 timestamp 小于当前 TCP 流已处理的最大 timestamp 值的报文是延迟到达的重复报文，可以予以丢弃。在上文的例子中，服务器已经处理数据包 Z，而后到来的 A1 包的 timestamp 必然小于 Z 包的 timestamp ，因此服务端会丢弃迟到的 A1 包，等待正确的报文到来。</p>
 <p>PAWS 机制的实现关键是内核保存了 Per-Connection 的最近接收时间戳，如果加以改进，就可以用来优化服务器TIME_WAIT状态的快速回收。</p>
@@ -387,11 +383,10 @@ containerd 93829 [031] 951470.340306: skb:kfree_skb: skbaddr&#x3D;0xffff8827bfce
     xen_evtchn_do_upcall+0x30
     xen_hvm_callback_vector+0x1af</code></pre>
 
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><img src="/posts/linux-packet-loss/4.jpg" srcset="/img/loading.gif" class="" title="This is an image">
-
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><img src="4.jpg" srcset="/img/loading.gif" alt="图 4 "></p>
 <p>linux 网络协议栈太深，每一层都有可能出现各种各样的问题，我们需要了解这些原理，同时利用好工具去排查这些问题。同时我们在优化的时候，不要盲目的看别人的优化结果，更重要的是体系化的去了解 linux 协议栈的实现，只有知其所以然，才能结合实际业务特点，得出最合理的优化配置。</p>
 <p>最后我按照倪鹏飞之前的优化，整理了一个表格，方便参考（数值仅供参考，具体配置还需要结合实际场景来调整）：</p>
-<img src="/posts/linux-packet-loss/6.png" srcset="/img/loading.gif" class="" title="This is an image">
+<p><img src="6.png" srcset="/img/loading.gif" alt="图 6 "></p>
 
             </article>
             <hr>
