@@ -150,6 +150,48 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/posts/liveness-probe-problem/" target="_self">
+          <img src="/img/posts/choco.png" srcset="/img/loading.gif" alt="LIVENESS PROBE 的问题">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a class="index-header" href="/posts/liveness-probe-problem/">LIVENESS PROBE 的问题</a>
+
+      <a href="/posts/liveness-probe-problem/" class="index-excerpt">
+        
+        
+          
+        
+        <div>Readiness and Liveness ProbesKubernetes 提供了两种功能 Readiness and Liveness Probes，它们可以定期执行操作（例如发出 HTTP 请求，打开 TCP 连接或在您的容器中运行命令），以确认您的应用程序按预期工作。
+Kubernetes 使用 Readiness Probes 来了解容器何时准备开始接受流量。当 Pod 的所有容器都准</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-06-28
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/cloud-native/">cloud-native</a>
+            
+              <a href="/tags/best-practive/">best-practive</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/cilium/" target="_self">
           <img src="/img/posts/cilium.png" srcset="/img/loading.gif" alt="Replacing iptables with eBPF in Kubernetes with Cilium">
         </a>
@@ -539,58 +581,6 @@ Kubernetes 运行一组控制器，它们负责处理日常任务，以确保集
               <a href="/tags/tcp/">tcp</a>
             
               <a href="/tags/kernel/">kernel</a>
-            
-          </div>
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/posts/connect-timeout-problem/" target="_self">
-          <img src="/img/posts/tcp.jpeg" srcset="/img/loading.gif" alt="一个 Connect Timeout 故障排查">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 mx-auto index-info">
-      <a class="index-header" href="/posts/connect-timeout-problem/">一个 Connect Timeout 故障排查</a>
-
-      <a href="/posts/connect-timeout-problem/" class="index-excerpt">
-        
-        
-          
-        
-        <div>问题描述有用户反馈在dubbo的应用发布后，过几分钟之后，调用方会出现大量的connectTimeout。当时在服务端容器上进行了抓包，看到在故障期间，客户端发了syn，但是服务端没有任何响应。
-
-
-分析问题正常的TCP三次握手：
-
-
-
-客户端发送syn给服务端发起握手
-
-服务端收到syn后回复syn+ack
-
-客户端收到syn+ack后，回复ack给服务端，此时客户端上这个连接，进入establ</div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2019-10-21
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/sre/">sre</a>
-            
-              <a href="/tags/tcp/">tcp</a>
             
           </div>
         

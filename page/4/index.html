@@ -150,6 +150,47 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/posts/fullnat-get-sip/" target="_self">
+          <img src="/img/posts/loadbalance.png" srcset="/img/loading.gif" alt="解决 fullnat 下获取用户源 IP">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a class="index-header" href="/posts/fullnat-get-sip/">解决 fullnat 下获取用户源 IP</a>
+
+      <a href="/posts/fullnat-get-sip/" class="index-excerpt">
+        
+        
+          
+        
+        <div>概要在设计L4负载均衡架构的时候，往往选择fnat，它支持LB和RS垮vlan通信。LB位于客户端和后端服务之间，对于客户端的请求报文，将目的地址替换成后端服务的地址，源地址替换成LB的本地地址，对于后端服务的响应报文，将目的地址替换成客户端地址，源地址替换成LB的VIP地址。这样就带来一个问题，后端RS上就看不到客户端的源IP了，业内比较常见的有两种解决方案：
+
+TOA，将客户端源IP插入到TC</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2018-01-31
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/tcp/">tcp</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/django-singal-post-update/" target="_self">
           <img src="/img/posts/coding.jpeg" srcset="/img/loading.gif" alt="django singal post update">
         </a>

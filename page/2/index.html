@@ -150,6 +150,58 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/posts/connect-timeout-problem/" target="_self">
+          <img src="/img/posts/tcp.jpeg" srcset="/img/loading.gif" alt="一个 Connect Timeout 故障排查">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a class="index-header" href="/posts/connect-timeout-problem/">一个 Connect Timeout 故障排查</a>
+
+      <a href="/posts/connect-timeout-problem/" class="index-excerpt">
+        
+        
+          
+        
+        <div>问题描述有用户反馈在dubbo的应用发布后，过几分钟之后，调用方会出现大量的connectTimeout。当时在服务端容器上进行了抓包，看到在故障期间，客户端发了syn，但是服务端没有任何响应。
+
+
+分析问题正常的TCP三次握手：
+
+
+
+客户端发送syn给服务端发起握手
+
+服务端收到syn后回复syn+ack
+
+客户端收到syn+ack后，回复ack给服务端，此时客户端上这个连接，进入establ</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2019-10-21
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/sre/">sre</a>
+            
+              <a href="/tags/tcp/">tcp</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/masteringgo-translate/" target="_self">
           <img src="/img/posts/coding.jpeg" srcset="/img/loading.gif" alt="MasteringGo 翻译完成">
         </a>
@@ -523,48 +575,6 @@ Any customer can have a car painted any color that he wants so long as it is bla
             <i class="iconfont icon-tags"></i>
             
               <a href="/tags/python/">python</a>
-            
-          </div>
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/posts/skyline-timeseries-anomaly-detection/" target="_self">
-          <img src="/img/posts/aiops.png" srcset="/img/loading.gif" alt="skyline timeseries 异常检测算法介绍">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 mx-auto index-info">
-      <a class="index-header" href="/posts/skyline-timeseries-anomaly-detection/">skyline timeseries 异常检测算法介绍</a>
-
-      <a href="/posts/skyline-timeseries-anomaly-detection/" class="index-excerpt">
-        
-        
-          
-        
-        <div>最近重新拾起了异常检测这块内容，所以把skyline预定义的几个算法分析了下，总体来说代码还是比较简单和清楚的，输入是一个timeseries，输出是检测结果（True or False）。
-3-sigma一个很直接的异常判定思路是，拿最新3个datapoint的平均值（tail_avg方法）和整个序列比较，看是否偏离总体平均水平太多。怎样算“太多”呢，因为standard deviation表示</div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2018-06-07
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/sre/">sre</a>
-            
-              <a href="/tags/aiops/">aiops</a>
             
           </div>
         
