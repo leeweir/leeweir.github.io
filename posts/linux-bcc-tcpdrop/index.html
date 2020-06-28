@@ -19,7 +19,7 @@
   <meta name="description" content="嗜好太多，能力太小">
   <meta name="author" content="LeeWeir">
   <meta name="keywords" content="">
-  <title>(译) Linux bcc/eBPF tcpdrop - Weir&#39;s Note</title>
+  <title>[译] Linux bcc/eBPF tcpdrop - Weir&#39;s Note</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
@@ -176,7 +176,7 @@
             
             <article class="markdown-body">
               <blockquote>
-<p>最近在看eBPF的一些材料，看到Brendan Gregg的博客，后面想陆续针对一些主题翻译下，这一篇主要自介绍 tcpdrop，文章比较短，<a href="http://www.brendangregg.com/blog/2018-05-31/linux-tcpdrop.html" target="_blank" rel="noopener">原文地址</a></p>
+<p>最近在看 eBPF 的一些材料，看到 Brendan Gregg 的博客，后面想陆续针对一些主题翻译下，这一篇主要自介绍 tcpdrop，文章比较短，<a href="http://www.brendangregg.com/blog/2018-05-31/linux-tcpdrop.html" target="_blank" rel="noopener">原文地址</a></p>
 </blockquote>
 <p>在调试基于内核的 TCP 数据包丢弃的生产问题时，我记得在Linux 4.7中 Eric Dumazet（Google) 添加了一个名为 tcp_drop() 的新功能，我可以使用 kprobes 和 bcc/eBPF 进行跟踪。</p>
 <p>这需要获得了更多的上下文来解释为什么发生这些丢包。例如：</p>
@@ -531,7 +531,7 @@ TIME     PID    IP SADDR:SPORT          &gt; DADDR:DPORT          STATE (FLAGS)
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "(译) Linux bcc/eBPF tcpdrop&nbsp;",
+        "[译] Linux bcc/eBPF tcpdrop&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
