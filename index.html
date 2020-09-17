@@ -150,6 +150,59 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/posts/stability/" target="_self">
+          <img src="/img/posts/choco.png" srcset="/img/loading.gif" alt="稳定性的模式与反模式">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a class="index-header" href="/posts/stability/">稳定性的模式与反模式</a>
+
+      <a href="/posts/stability/" class="index-excerpt">
+        
+        
+          
+        
+        <div>稳定性的模式与反模式
+稳定性之于系统，就像健康之于人类，看起来重要不紧急，然而一旦失去，就追悔莫及。
+
+
+稳定性是一切 0 前面的 1。
+
+本文简单介绍下稳定的模式和反模式，大家在设计系统的时候可以多一点思考。
+稳定性的反模式：集成点
+每一个依赖点的都有可能有问题。
+利用断路器、超时、中间件解耦和握手等模式进行防御性编程，以防止集成点出现问题。
+
+同层连累反应
+例如在负载均衡下，一台服务器的停机会</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-09-17
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/sre/">sre</a>
+            
+              <a href="/tags/stability/">stability</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/posts/liveness-probe-problem/" target="_self">
           <img src="/img/posts/choco.png" srcset="/img/loading.gif" alt="LIVENESS PROBE 的问题">
         </a>
@@ -534,53 +587,6 @@ Kubernetes 运行一组控制器，它们负责处理日常任务，以确保集
               <a href="/tags/tcp/">tcp</a>
             
               <a href="/tags/linux/">linux</a>
-            
-          </div>
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/posts/linux-bcc-tcpdrop/" target="_self">
-          <img src="/img/posts/bcc.png" srcset="/img/loading.gif" alt="[译] Linux bcc/eBPF tcpdrop">
-        </a>
-      </div>
-    
-    <div class="col-12 col-md-8 mx-auto index-info">
-      <a class="index-header" href="/posts/linux-bcc-tcpdrop/">[译] Linux bcc/eBPF tcpdrop</a>
-
-      <a href="/posts/linux-bcc-tcpdrop/" class="index-excerpt">
-        
-        
-          
-        
-        <div>
-最近在看 eBPF 的一些材料，看到 Brendan Gregg 的博客，后面想陆续针对一些主题翻译下，这一篇主要自介绍 tcpdrop，文章比较短，原文地址
-
-在调试基于内核的 TCP 数据包丢弃的生产问题时，我记得在Linux 4.7中 Eric Dumazet（Google) 添加了一个名为 tcp_drop() 的新功能，我可以使用 kprobes 和 bcc/eBPF 进行跟踪。
-这需</div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2019-10-25
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/sre/">sre</a>
-            
-              <a href="/tags/tcp/">tcp</a>
-            
-              <a href="/tags/kernel/">kernel</a>
             
           </div>
         
