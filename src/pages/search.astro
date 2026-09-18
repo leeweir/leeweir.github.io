@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="搜索" description="搜索 Weir's Note 的文章标题、标签与正文。">
+  <header class="page-header"><p class="eyebrow">SEARCH</p><h1>找一篇笔记。</h1><p class="muted">搜索标题、标签与正文，所有检索均在浏览器本地完成。</p></header>
+  <form role="search" action="/search/" method="get" id="search-form">
+    <label for="query">关键词</label>
+    <div class="search-controls"><input class="search-field" id="query" name="q" type="search" placeholder="例如：TLS、丢包、Kubernetes" autocomplete="off" required /><button type="submit">搜索</button></div>
+  </form>
+  <p id="search-status" class="muted" role="status" aria-live="polite">输入关键词，按 Enter 搜索。</p>
+  <ul id="search-results" class="search-results"></ul>
+  <noscript><p>搜索需要 JavaScript。也可以浏览<a href="/archives/">文章归档</a>或<a href="/tags/">标签</a>。</p></noscript>
+</BaseLayout>
+<style>
+  .search-controls { display: flex; align-items: center; gap: 0.75rem; max-width: 760px; }
+  .search-field { flex: 1; }
+  button { flex-shrink: 0; padding: 0.8rem 1.2rem; color: var(--page); background: var(--accent); border: 1px solid var(--accent); border-radius: 4px; }
+</style>
+<script>
+  type SearchEntry = { title: string; description: string; tags: string[]; url: string; content: string };
+  const form = document.querySelector<HTMLFormElement>('#search-form')!;
+  const input = document.querySelector<HTMLInputElement>('#query')!;
+  const status = document.querySelector<HTMLParagraphElement>('#search-status')!;
+  const results = document.querySelector<HTMLUListElement>('#search-results')!;
+  let index: Promise<SearchEntry[]> | undefined;
+  let request = 0;
+
+  async function search() {
+    const currentRequest = ++request;
+    const query = input.value.trim();
+    results.replaceChildren();
+    const url = new URL(window.location.href);
+    if (query) url.searchParams.set('q', query);
+    else url.searchParams.delete('q');
+    window.history.replaceState(null, '', url);
+    if (!query) {
+      status.textContent = '请输入关键词。';
+      return;
+    }
+    status.textContent = '正在搜索…';
+    try {
+      index ??= fetch('/search-index.json').then((response) => {
+        if (!response.ok) throw new Error('Search index unavailable');
+        return response.json();
+      });
+      const posts = await index;
+      if (currentRequest !== request) return;
+      const terms = query.toLocaleLowerCase().split(/\s+/u);
+      const matches = posts.filter((post) => {
+        const text = `${post.title}\n${post.tags.join(' ')}\n${post.content}`.toLocaleLowerCase();
+        return terms.every((term) => text.includes(term));
+      });
+      const fragment = document.createDocumentFragment();
+      for (const post of matches) {
+        const item = document.createElement('li');
+        const heading = document.createElement('h2');
+        const link = document.createElement('a');
+        link.href = post.url;
+        link.textContent = post.title;
+        heading.append(link);
+        const description = document.createElement('p');
+        description.className = 'muted';
+        description.textContent = post.description;
+        item.append(heading, description);
+        fragment.append(item);
+      }
+      results.replaceChildren(fragment);
+      status.textContent = matches.length ? `找到 ${matches.length} 篇相关文章。` : '没有找到相关文章，试试其他关键词。';
+    } catch {
+      index = undefined;
+      if (currentRequest === request) status.textContent = '搜索索引加载失败。请稍后再试，或通过归档浏览文章。';
+    }
+  }
+  form.addEventListener('submit', (event) => { event.preventDefault(); void search(); });
+  input.value = new URLSearchParams(window.location.search).get('q') ?? '';
+  if (input.value.trim()) void search();
+</script>

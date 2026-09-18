@@ -1,0 +1,91 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  articleDate?: string;
+}
+
+const {
+  title,
+  description = '嗜好太多，能力太小',
+  canonical,
+  articleDate,
+} = Astro.props;
+const siteName = "Weir's Note";
+const pageTitle = title && title !== siteName ? `${title} · ${siteName}` : siteName;
+const siteUrl = Astro.site ?? new URL('https://leeweir.github.io');
+const canonicalUrl = new URL(canonical ?? Astro.url.pathname, siteUrl).href;
+const imageUrl = new URL('/img/tx.jpeg', siteUrl).href;
+const pathname = Astro.url.pathname;
+const navigation = [
+  { label: '文章', href: '/' },
+  { label: '归档', href: '/archives/' },
+  { label: '标签', href: '/tags/' },
+  { label: '关于', href: '/about/' },
+  { label: '搜索', href: '/search/' },
+];
+const isActive = (href: string) =>
+  href === '/'
+    ? pathname === '/' || pathname.startsWith('/page/') || pathname.startsWith('/posts/')
+    : pathname === href.slice(0, -1) || pathname.startsWith(href);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f8f7f3" />
+    <meta name="description" content={description} />
+    <meta name="author" content="LeeWeir" />
+    <title>{pageTitle}</title>
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" type="image/jpeg" href="/img/tx.jpeg" />
+    <link rel="alternate" type="application/rss+xml" title={siteName} href="/rss.xml" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content={articleDate ? 'article' : 'website'} />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:alt" content="LeeWeir" />
+    {articleDate && <meta property="article:published_time" content={articleDate} />}
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳至正文</a>
+    <header class="site-header shell">
+      <div class="site-identity">
+        <a class="site-name" href="/">{siteName}</a>
+        <p class="site-subtitle">嗜好太多，能力太小</p>
+      </div>
+      <nav class="site-nav" aria-label="主导航">
+        {
+          navigation.map(({ label, href }) => (
+            <a
+              href={href}
+              class:list={{ 'is-active': isActive(href) }}
+              aria-current={isActive(href) ? (pathname === href ? 'page' : 'true') : undefined}
+            >
+              {label}
+            </a>
+          ))
+        }
+      </nav>
+    </header>
+    <main id="main-content" class="shell main-content" tabindex="-1">
+      <slot />
+    </main>
+    <footer class="site-footer shell">
+      <span>LeeWeir</span>
+      <nav aria-label="页脚导航">
+        <a href="https://github.com/leeweir" rel="me">GitHub</a>
+        <a href="/rss.xml">RSS</a>
+      </nav>
+    </footer>
+  </body>
+</html>

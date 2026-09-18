@@ -1,0 +1,35 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts, postUrl, tagUrl, formatDate } from '../../lib/posts';
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post, index) => ({
+    params: { slug: post.id },
+    props: { post, newer: posts[index - 1], older: posts[index + 1] },
+  }));
+}
+const { post, newer, older } = Astro.props;
+const { Content, headings } = await render(post);
+---
+<BaseLayout title={post.data.title} description={post.data.description} articleDate={post.data.date}>
+  <header class="post-header">
+    <a class="eyebrow" href="/archives/">← 所有文章</a>
+    <h1>{post.data.title}</h1>
+    <div class="post-meta"><time datetime={post.data.date}>{formatDate(post.data.date)}</time><span>LeeWeir</span></div>
+    <div class="tag-list">{post.data.tags.map((tag) => <a class="tag" href={tagUrl(tag)}>{tag}</a>)}</div>
+  </header>
+  <div class="post-layout">
+    <div class="post-main">
+      <article class="prose"><Content /></article>
+      <nav class="post-navigation" aria-label="相邻文章">
+        <div>{newer && <a href={postUrl(newer)}><span class="muted">← 较新一篇</span>{newer.data.title}</a>}</div>
+        <div>{older && <a href={postUrl(older)}><span class="muted">较早一篇 →</span>{older.data.title}</a>}</div>
+      </nav>
+    </div>
+    {headings.length > 0 && <details class="toc" open>
+      <summary>文章目录</summary>
+      <nav aria-label="文章目录"><ol>{headings.map((heading) => <li style={`--depth: ${heading.depth}`}><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol></nav>
+    </details>}
+  </div>
+</BaseLayout>

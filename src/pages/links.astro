@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const links = [
+  { title: 'Fluid Docs', description: '主题使用指南', url: 'https://hexo.fluid-dev.com/docs/' },
+  { title: 'Fluid Repo', description: '主题 GitHub 仓库', url: 'https://github.com/fluid-dev/hexo-theme-fluid' },
+  { title: 'Fluid Example', description: '主题操作示例', url: 'https://hexo.fluid-dev.com/docs/example/' },
+];
+---
+<BaseLayout title="链接">
+  <header class="page-header"><p class="eyebrow">LINKS</p><h1>链接</h1><p class="muted">保留旧站收录的主题资源。</p></header>
+  <ul class="prose">{links.map((link) => <li><a href={link.url}>{link.title}</a> — {link.description}</li>)}</ul>
+</BaseLayout>

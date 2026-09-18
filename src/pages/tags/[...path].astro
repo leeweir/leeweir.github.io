@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/PostList.astro';
+import Pagination from '../../components/Pagination.astro';
+import { getPosts, PAGE_SIZE, tagUrl } from '../../lib/posts';
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
+  return tags.flatMap((tag) => {
+    const selected = posts.filter((post) => post.data.tags.includes(tag));
+    const total = Math.ceil(selected.length / PAGE_SIZE);
+    return Array.from({ length: total }, (_, index) => {
+      const current = index + 1;
+      return { params: { path: current === 1 ? tag : `${tag}/page/${current}` }, props: { tag, current, total, count: selected.length, posts: selected.slice(index * PAGE_SIZE, current * PAGE_SIZE) } };
+    });
+  });
+}
+const { tag, current, total, count, posts } = Astro.props;
+---
+<BaseLayout title={`${tag}${current > 1 ? ` · 第 ${current} 页` : ''}`}>
+  <header class="page-header"><a class="eyebrow" href="/tags/">← 所有标签</a><h1>{tag}</h1><p class="muted">{count} 篇相关笔记</p></header>
+  <PostList posts={posts} />
+  <Pagination current={current} total={total} base={tagUrl(tag)} />
+</BaseLayout>

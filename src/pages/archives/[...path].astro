@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/PostList.astro';
+import Pagination from '../../components/Pagination.astro';
+import { getPosts, PAGE_SIZE, type Post } from '../../lib/posts';
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const periods = ['', ...new Set(posts.flatMap((post) => [post.data.date.slice(0, 4), post.data.date.slice(0, 7).replace('-', '/')]))];
+  return periods.flatMap((period) => {
+    const selected = posts.filter((post) => post.data.date.startsWith(period.replace('/', '-')));
+    const total = Math.ceil(selected.length / PAGE_SIZE);
+    return Array.from({ length: total }, (_, index) => {
+      const current = index + 1;
+      const path = [period, ...(current === 1 ? [] : ['page', String(current)])].filter(Boolean).join('/');
+      return { params: { path: path || undefined }, props: { posts: selected.slice(index * PAGE_SIZE, current * PAGE_SIZE), period, current, total, count: selected.length } };
+    });
+  });
+}
+const { posts, period, current, total, count } = Astro.props;
+const groups = new Map<string, Post[]>();
+for (const post of posts) {
+  const year = post.data.date.slice(0, 4);
+  const group = groups.get(year) ?? [];
+  group.push(post);
+  groups.set(year, group);
+}
+const title = period ? `${period.replace('/', ' / ')} 归档` : '文章归档';
+---
+<BaseLayout title={current > 1 ? `${title} · 第 ${current} 页` : title}>
+  <header class="page-header"><p class="eyebrow">ARCHIVE</p><h1>{title}</h1><p class="muted">共 {count} 篇笔记，按时间记录。</p>{period && <a href="/archives/">查看全部归档 →</a>}</header>
+  {[...groups].map(([year, entries]) => <section class="archive-group"><h2><a href={`/archives/${year}/`}>{year}</a></h2><PostList posts={entries} compact /></section>)}
+  <Pagination current={current} total={total} base={period ? `/archives/${period}/` : '/archives/'} />
+</BaseLayout>

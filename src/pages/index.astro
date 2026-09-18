@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostList from '../components/PostList.astro';
+import Pagination from '../components/Pagination.astro';
+import { getPosts, PAGE_SIZE } from '../lib/posts';
+const posts = await getPosts();
+const tags = new Set(posts.flatMap((post) => post.data.tags));
+---
+<BaseLayout>
+  <header class="page-header">
+    <p class="eyebrow">WEIR'S NOTE / 技术与思考</p>
+    <h1>把探索，写成笔记。</h1>
+    <p class="muted">关于云原生、系统稳定性与网络，也记录一路上的问题与思考。</p>
+  </header>
+  <div class="section-heading">
+    <h2>文章</h2>
+    <span class="muted">{posts.length} 篇笔记 · {tags.size} 个标签</span>
+  </div>
+  <PostList posts={posts.slice(0, PAGE_SIZE)} />
+  <Pagination current={1} total={Math.ceil(posts.length / PAGE_SIZE)} base="/" />
+</BaseLayout>

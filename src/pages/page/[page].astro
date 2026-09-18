@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/PostList.astro';
+import Pagination from '../../components/Pagination.astro';
+import { getPosts, PAGE_SIZE } from '../../lib/posts';
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const total = Math.ceil(posts.length / PAGE_SIZE);
+  return Array.from({ length: Math.max(0, total - 1) }, (_, index) => {
+    const current = index + 2;
+    return { params: { page: String(current) }, props: { posts: posts.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE), current, total } };
+  });
+}
+const { posts, current, total } = Astro.props;
+---
+<BaseLayout title={`文章 · 第 ${current} 页`}>
+  <header class="page-header"><p class="eyebrow">NOTES</p><h1>文章</h1><p class="muted">第 {current} 页，共 {total} 页</p></header>
+  <PostList posts={posts} />
+  <Pagination current={current} total={total} base="/" />
+</BaseLayout>

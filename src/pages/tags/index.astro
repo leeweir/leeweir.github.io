@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts, tagUrl } from '../../lib/posts';
+const posts = await getPosts();
+const counts = new Map<string, number>();
+for (const post of posts) for (const tag of post.data.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+const tags = [...counts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+---
+<BaseLayout title="标签">
+  <header class="page-header"><p class="eyebrow">TOPICS</p><h1>沿着兴趣，继续探索。</h1><p class="muted">{tags.length} 个标签，串起不同的笔记。</p></header>
+  <ul class="topic-list">{tags.map(([tag, count]) => <li><a href={tagUrl(tag)}><span>{tag}</span><span class="muted">{count} 篇 →</span></a></li>)}</ul>
+</BaseLayout>
+<style>
+  .topic-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 2rem; }
+  .topic-list a { display: flex; gap: 1rem; align-items: center; justify-content: space-between; padding: 1.3rem 0; border-bottom: 1px solid var(--border, #deded5); }
+  .topic-list span:first-child { overflow-wrap: anywhere; }
+  .topic-list .muted { white-space: nowrap; font-size: .8rem; }
+  @media (max-width: 720px) { .topic-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 1rem; } }
+  @media (max-width: 400px) { .topic-list { grid-template-columns: 1fr; } }
+</style>

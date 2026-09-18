@@ -1,0 +1,41 @@
+---
+import { formatDate, postUrl, tagUrl, type Post } from '../lib/posts';
+
+interface Props {
+  posts: Post[];
+  compact?: boolean;
+}
+
+const { posts, compact = false } = Astro.props;
+---
+
+<ol class:list={['post-list', { 'post-list--compact': compact }]}>
+  {
+    posts.map((post) => (
+      <li class="post-list-item">
+        <article class="post-preview">
+          <time class="post-preview-date" datetime={post.data.date}>
+            {formatDate(post.data.date)}
+          </time>
+          <div class="post-preview-content">
+            <h2 class="post-preview-title">
+              <a href={postUrl(post)}>{post.data.title}</a>
+            </h2>
+            {!compact && post.data.description && (
+              <p class="post-preview-description">{post.data.description}</p>
+            )}
+            {post.data.tags.length > 0 && (
+              <ul class="tag-list" aria-label="文章标签">
+                {post.data.tags.map((tag) => (
+                  <li>
+                    <a class="tag" href={tagUrl(tag)}>{tag}</a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </article>
+      </li>
+    ))
+  }
+</ol>
