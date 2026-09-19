@@ -24,7 +24,11 @@ const initialQuote = quotes[0];
     </blockquote>
     <figcaption id="quote-author">—— {initialQuote.author}</figcaption>
   </figure>
-  <a class="landing-blog" href="/blog/" aria-label="Weir's Note，进入文章列表">Weir's Note <span aria-hidden="true">→</span></a>
+  <a class="landing-blog" href="/blog/" aria-label="进入文章列表">
+    <svg width="32" height="24" viewBox="0 0 32 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+      <path d="M4 12h24M20 4l8 8-8 8" />
+    </svg>
+  </a>
   <script>
     import { quotes } from '../lib/quotes';
 
@@ -122,23 +126,16 @@ const initialQuote = quotes[0];
 
   .landing-blog {
     justify-self: end;
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-    min-height: 48px;
-    padding: 0.5rem 0.25rem;
-    border-bottom: 1px solid var(--accent);
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
     color: var(--accent);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.15rem;
-    font-weight: 400;
-    letter-spacing: -0.015em;
     text-decoration: none;
   }
 
   .landing-blog:hover {
-    border-color: var(--ink);
     color: var(--ink);
+    text-decoration: none;
   }
 </style>
