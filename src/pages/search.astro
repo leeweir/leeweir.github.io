@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="搜索" description="搜索 Weir's Note 的文章标题、标签与正文。">
-  <header class="page-header"><p class="eyebrow">SEARCH</p><h1>找一篇笔记。</h1><p class="muted">搜索标题、标签与正文，所有检索均在浏览器本地完成。</p></header>
+  <header class="page-header"><h1>搜索</h1><p class="muted">搜索文章标题、标签与正文。</p></header>
   <form role="search" action="/search/" method="get" id="search-form">
     <label for="query">关键词</label>
     <div class="search-controls"><input class="search-field" id="query" name="q" type="search" placeholder="例如：TLS、丢包、Kubernetes" autocomplete="off" required /><button type="submit">搜索</button></div>

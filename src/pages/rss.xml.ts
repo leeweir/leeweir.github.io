@@ -6,7 +6,7 @@ export async function GET(context: APIContext) {
   const posts = await getPosts();
   return rss({
     title: "Weir's Note",
-    description: '嗜好太多，能力太小',
+    description: '应无所住而生其心',
     site: context.site!,
     items: posts.map((post) => ({
       title: post.data.title,

@@ -1,21 +1,144 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PostList from '../components/PostList.astro';
-import Pagination from '../components/Pagination.astro';
-import { getPosts, PAGE_SIZE } from '../lib/posts';
-const posts = await getPosts();
-const tags = new Set(posts.flatMap((post) => post.data.tags));
+import { quotes } from '../lib/quotes';
+const initialQuote = quotes[0];
 ---
-<BaseLayout>
-  <header class="page-header">
-    <p class="eyebrow">WEIR'S NOTE / 技术与思考</p>
-    <h1>凡我不能创造的，我就不能理解。</h1>
-    <p class="muted">—— 理查德·费曼</p>
-  </header>
-  <div class="section-heading">
-    <h2>文章</h2>
-    <span class="muted">{posts.length} 篇笔记 · {tags.size} 个标签</span>
-  </div>
-  <PostList posts={posts.slice(0, PAGE_SIZE)} />
-  <Pagination current={1} total={Math.ceil(posts.length / PAGE_SIZE)} base="/" />
+<BaseLayout landing description="Weir 的个人博客，记录 Linux、网络与云原生技术。">
+  <script slot="head" is:inline>
+    // Select the comparison font before first paint; preload only that font.
+    {
+      const font = new URLSearchParams(location.search).get('font') === 'fangsong' ? 'fangsong' : 'wenkai';
+      document.documentElement.dataset.quoteFont = font;
+      const preload = document.createElement('link');
+      preload.rel = 'preload';
+      preload.href = `/fonts/quote-${font}.woff2`;
+      preload.as = 'font';
+      preload.type = 'font/woff2';
+      preload.crossOrigin = 'anonymous';
+      document.head.append(preload);
+    }
+  </script>
+  <figure class="landing-quote">
+    <blockquote id="landing-quote" cite={initialQuote.source}>
+      <h1 id="quote-text">{initialQuote.text}</h1>
+    </blockquote>
+    <figcaption id="quote-author">—— {initialQuote.author}</figcaption>
+  </figure>
+  <a class="landing-blog" href="/blog/" aria-label="Weir's Note，进入文章列表">Weir's Note <span aria-hidden="true">→</span></a>
+  <script>
+    import { quotes } from '../lib/quotes';
+
+    const previousIndex = quotes.findIndex((quote) => quote.text === history.state?.landingQuote);
+    let index = Math.floor(Math.random() * (quotes.length - (previousIndex >= 0 ? 1 : 0)));
+    if (previousIndex >= 0 && index >= previousIndex) index += 1;
+    // Explicit preview links show the same quote in both typefaces.
+    // Normal visits keep the existing random, non-repeating selection.
+    const params = new URLSearchParams(location.search);
+    if (params.get('font') === 'wenkai' || params.get('font') === 'fangsong') {
+      const requestedQuote = Number(params.get('quote'));
+      index = Number.isInteger(requestedQuote) && requestedQuote >= 1 && requestedQuote <= quotes.length
+        ? requestedQuote - 1
+        : 6;
+    }
+    const quote = quotes[index];
+    document.getElementById('quote-text')!.textContent = quote.text;
+    document.getElementById('quote-author')!.textContent = `—— ${quote.author}`;
+    document.getElementById('landing-quote')!.setAttribute('cite', quote.source);
+    history.replaceState({ ...history.state, landingQuote: quote.text }, '');
+  </script>
 </BaseLayout>
+
+<style>
+  @font-face {
+    font-family: "Weir Quote Wenkai";
+    src: url('/fonts/quote-wenkai.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Weir Quote Fangsong";
+    src: url('/fonts/quote-fangsong.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+  }
+
+  :global(body.landing-page) {
+    min-height: 100svh;
+  }
+
+  :global(.landing-content) {
+    --landing-space: clamp(1rem, 2vw, 1.5rem);
+    display: grid;
+    grid-template-rows: minmax(min-content, 1fr) auto;
+    gap: 2rem;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: var(--landing-space);
+    padding-top: max(var(--landing-space), env(safe-area-inset-top));
+    padding-right: max(var(--landing-space), env(safe-area-inset-right));
+    padding-bottom: max(var(--landing-space), env(safe-area-inset-bottom));
+    padding-left: max(var(--landing-space), env(safe-area-inset-left));
+  }
+
+  .landing-quote {
+    --quote-font: "Weir Quote Wenkai", "Kaiti SC", "STKaiti", "KaiTi", serif;
+    align-self: center;
+    justify-self: center;
+    max-width: 100%;
+    margin: 0;
+    width: min(100%, 56rem);
+    text-align: center;
+  }
+
+  :global(html[data-quote-font="fangsong"]) .landing-quote {
+    --quote-font: "Weir Quote Fangsong", "STFangsong", "FangSong", serif;
+  }
+
+  .landing-quote blockquote {
+    margin: 0;
+  }
+
+  .landing-quote h1 {
+    margin: 0;
+    font-family: var(--quote-font);
+    font-size: clamp(1.65rem, min(3.4vw, 7vh), 3rem);
+    font-weight: 400;
+    line-height: 1.8;
+    letter-spacing: 0.015em;
+    line-break: strict;
+    text-wrap: balance;
+  }
+
+  .landing-quote figcaption {
+    margin-top: clamp(1.5rem, 3vw, 2rem);
+    color: var(--muted);
+    font-family: var(--quote-font);
+    font-size: 0.9375rem;
+    letter-spacing: 0.04em;
+  }
+
+  .landing-blog {
+    justify-self: end;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    min-height: 48px;
+    padding: 0.5rem 0.25rem;
+    border-bottom: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    text-decoration: none;
+  }
+
+  .landing-blog:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+</style>

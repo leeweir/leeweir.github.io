@@ -6,13 +6,15 @@ interface Props {
   description?: string;
   canonical?: string;
   articleDate?: string;
+  landing?: boolean;
 }
 
 const {
   title,
-  description = '嗜好太多，能力太小',
+  description = '应无所住而生其心',
   canonical,
   articleDate,
+  landing = false,
 } = Astro.props;
 const siteName = "Weir's Note";
 const pageTitle = title && title !== siteName ? `${title} · ${siteName}` : siteName;
@@ -21,16 +23,16 @@ const canonicalUrl = new URL(canonical ?? Astro.url.pathname, siteUrl).href;
 const imageUrl = new URL('/img/tx.jpeg', siteUrl).href;
 const pathname = Astro.url.pathname;
 const navigation = [
-  { label: '文章', href: '/' },
+  { label: '文章', href: '/blog/' },
   { label: '归档', href: '/archives/' },
   { label: '标签', href: '/tags/' },
   { label: '关于', href: '/about/' },
   { label: '搜索', href: '/search/' },
 ];
 const isActive = (href: string) =>
-  href === '/'
-    ? pathname === '/' || pathname.startsWith('/page/') || pathname.startsWith('/posts/')
-    : pathname === href.slice(0, -1) || pathname.startsWith(href);
+  pathname === href.slice(0, -1) ||
+  pathname.startsWith(href) ||
+  (href === '/blog/' && (pathname.startsWith('/page/') || pathname.startsWith('/posts/')));
 ---
 
 <!doctype html>
@@ -40,7 +42,7 @@ const isActive = (href: string) =>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#f8f7f3" />
     <meta name="description" content={description} />
-    <meta name="author" content="LeeWeir" />
+    <meta name="author" content="Weir" />
     <title>{pageTitle}</title>
     <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" type="image/jpeg" href="/img/tx.jpeg" />
@@ -52,16 +54,16 @@ const isActive = (href: string) =>
     <meta property="og:type" content={articleDate ? 'article' : 'website'} />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:image" content={imageUrl} />
-    <meta property="og:image:alt" content="LeeWeir" />
+    <meta property="og:image:alt" content="Weir" />
     {articleDate && <meta property="article:published_time" content={articleDate} />}
     <slot name="head" />
   </head>
-  <body>
+  <body class:list={{ 'landing-page': landing }}>
     <a class="skip-link" href="#main-content">跳至正文</a>
-    <header class="site-header shell">
+    {!landing && <header class="site-header shell">
       <div class="site-identity">
         <a class="site-name" href="/">{siteName}</a>
-        <p class="site-subtitle">嗜好太多，能力太小</p>
+        <p class="site-subtitle">应无所住而生其心</p>
       </div>
       <nav class="site-nav" aria-label="主导航">
         {
@@ -76,16 +78,16 @@ const isActive = (href: string) =>
           ))
         }
       </nav>
-    </header>
-    <main id="main-content" class="shell main-content" tabindex="-1">
+    </header>}
+    <main id="main-content" class:list={{ shell: !landing, 'main-content': !landing, 'landing-content': landing }} tabindex="-1">
       <slot />
     </main>
-    <footer class="site-footer shell">
-      <span>LeeWeir</span>
+    {!landing && <footer class="site-footer shell">
+      <span>Weir</span>
       <nav aria-label="页脚导航">
         <a href="https://github.com/leeweir" rel="me">GitHub</a>
         <a href="/rss.xml">RSS</a>
       </nav>
-    </footer>
+    </footer>}
   </body>
 </html>

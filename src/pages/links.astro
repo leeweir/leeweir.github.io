@@ -7,6 +7,6 @@ const links = [
 ];
 ---
 <BaseLayout title="链接">
-  <header class="page-header"><p class="eyebrow">LINKS</p><h1>链接</h1><p class="muted">保留旧站收录的主题资源。</p></header>
+  <header class="page-header"><h1>链接</h1><p class="muted">保留旧站收录的主题资源。</p></header>
   <ul class="prose">{links.map((link) => <li><a href={link.url}>{link.title}</a> — {link.description}</li>)}</ul>
 </BaseLayout>

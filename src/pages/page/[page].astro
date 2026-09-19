@@ -14,7 +14,7 @@ export async function getStaticPaths() {
 const { posts, current, total } = Astro.props;
 ---
 <BaseLayout title={`文章 · 第 ${current} 页`}>
-  <header class="page-header"><p class="eyebrow">NOTES</p><h1>文章</h1><p class="muted">第 {current} 页，共 {total} 页</p></header>
+  <header class="page-header"><h1>文章</h1><p class="muted">第 {current} 页，共 {total} 页</p></header>
   <PostList posts={posts} />
-  <Pagination current={current} total={total} base="/" />
+  <Pagination current={current} total={total} base="/" firstPage="/blog/" />
 </BaseLayout>

@@ -1,12 +1,16 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { normalizeTag } from './tags';
 
 export type Post = CollectionEntry<'posts'>;
 export const PAGE_SIZE = 10;
 
 export async function getPosts(): Promise<Post[]> {
-  return (await getCollection('posts')).sort(
-    (a, b) => b.data.date.localeCompare(a.data.date) || a.id.localeCompare(b.id),
-  );
+  return (await getCollection('posts'))
+    .map((post) => ({
+      ...post,
+      data: { ...post.data, tags: [...new Set(post.data.tags.map(normalizeTag))] },
+    }))
+    .sort((a, b) => b.data.date.localeCompare(a.data.date) || a.id.localeCompare(b.id));
 }
 
 export function postUrl(post: Post): string {
@@ -14,7 +18,7 @@ export function postUrl(post: Post): string {
 }
 
 export function tagUrl(tag: string): string {
-  return `/tags/${encodeURIComponent(tag)}/`;
+  return `/tags/${encodeURIComponent(normalizeTag(tag))}/`;
 }
 
 // The old site did not store a timezone. Keep its calendar date unchanged.

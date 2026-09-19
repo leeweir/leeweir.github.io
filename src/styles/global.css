@@ -234,14 +234,12 @@ h6 {
   color: var(--muted);
 }
 
-.eyebrow {
-  margin: 0 0 0.65rem;
+.back-link {
+  display: inline-block;
+  margin-bottom: 0.65rem;
+  padding-block: 0.35rem;
   color: var(--accent);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 0.82rem;
 }
 
 .muted {
@@ -819,9 +817,9 @@ h6 {
     background: var(--surface);
   }
 
-  .toc[open] > :not(summary) {
-    max-height: 18rem;
-    overflow-y: auto;
+  .toc summary {
+    min-height: 44px;
+    padding-block: 0.7rem;
   }
 }
 

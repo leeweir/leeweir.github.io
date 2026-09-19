@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getPosts, postUrl, tagUrl, formatDate } from '../../lib/posts';
+import { tagLabel } from '../../lib/tags';
 export async function getStaticPaths() {
   const posts = await getPosts();
   return posts.map((post, index) => ({
@@ -14,10 +15,10 @@ const { Content, headings } = await render(post);
 ---
 <BaseLayout title={post.data.title} description={post.data.description} articleDate={post.data.date}>
   <header class="post-header">
-    <a class="eyebrow" href="/archives/">← 所有文章</a>
+    <a class="back-link" href="/blog/">← 所有文章</a>
     <h1>{post.data.title}</h1>
-    <div class="post-meta"><time datetime={post.data.date}>{formatDate(post.data.date)}</time><span>LeeWeir</span></div>
-    <div class="tag-list">{post.data.tags.map((tag) => <a class="tag" href={tagUrl(tag)}>{tag}</a>)}</div>
+    <div class="post-meta"><time datetime={post.data.date}>{formatDate(post.data.date)}</time><span>Weir</span></div>
+    <div class="tag-list">{post.data.tags.map((tag) => <a class="tag" href={tagUrl(tag)}>{tagLabel(tag)}</a>)}</div>
   </header>
   <div class="post-layout">
     <div class="post-main">
@@ -27,9 +28,20 @@ const { Content, headings } = await render(post);
         <div>{older && <a href={postUrl(older)}><span class="muted">较早一篇 →</span>{older.data.title}</a>}</div>
       </nav>
     </div>
-    {headings.length > 0 && <details class="toc" open>
+    {headings.length > 0 && <details class="toc">
       <summary>文章目录</summary>
       <nav aria-label="文章目录"><ol>{headings.map((heading) => <li style={`--depth: ${heading.depth}`}><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol></nav>
     </details>}
   </div>
 </BaseLayout>
+
+<script>
+  const toc = document.querySelector<HTMLDetailsElement>('.toc');
+  if (toc) {
+    const desktop = window.matchMedia('(min-width: 901px)');
+    const setDefault = () => { toc.open = desktop.matches; };
+    setDefault();
+    // Reset only when crossing the layout breakpoint, not on every resize.
+    desktop.addEventListener('change', setDefault);
+  }
+</script>

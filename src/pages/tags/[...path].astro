@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostList from '../../components/PostList.astro';
 import Pagination from '../../components/Pagination.astro';
 import { getPosts, PAGE_SIZE, tagUrl } from '../../lib/posts';
+import { tagLabel } from '../../lib/tags';
 export async function getStaticPaths() {
   const posts = await getPosts();
   const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
@@ -17,8 +18,8 @@ export async function getStaticPaths() {
 }
 const { tag, current, total, count, posts } = Astro.props;
 ---
-<BaseLayout title={`${tag}${current > 1 ? ` · 第 ${current} 页` : ''}`}>
-  <header class="page-header"><a class="eyebrow" href="/tags/">← 所有标签</a><h1>{tag}</h1><p class="muted">{count} 篇相关笔记</p></header>
+<BaseLayout title={`${tagLabel(tag)}${current > 1 ? ` · 第 ${current} 页` : ''}`}>
+  <header class="page-header"><a class="back-link" href="/tags/">← 所有标签</a><h1>{tagLabel(tag)}</h1><p class="muted">{count} 篇文章</p></header>
   <PostList posts={posts} />
   <Pagination current={current} total={total} base={tagUrl(tag)} />
 </BaseLayout>

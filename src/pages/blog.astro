@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostList from '../components/PostList.astro';
+import Pagination from '../components/Pagination.astro';
+import { getPosts, PAGE_SIZE } from '../lib/posts';
+const posts = await getPosts();
+const tags = new Set(posts.flatMap((post) => post.data.tags));
+---
+<BaseLayout title="文章">
+  <header class="page-header">
+    <h1>文章</h1>
+    <p class="muted">{posts.length} 篇文章，{tags.size} 个标签</p>
+  </header>
+  <PostList posts={posts.slice(0, PAGE_SIZE)} />
+  <Pagination current={1} total={Math.ceil(posts.length / PAGE_SIZE)} base="/" firstPage="/blog/" />
+</BaseLayout>

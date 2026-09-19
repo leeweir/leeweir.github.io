@@ -1,5 +1,6 @@
 ---
 import { formatDate, postUrl, tagUrl, type Post } from '../lib/posts';
+import { tagLabel } from '../lib/tags';
 
 interface Props {
   posts: Post[];
@@ -28,7 +29,7 @@ const { posts, compact = false } = Astro.props;
               <ul class="tag-list" aria-label="文章标签">
                 {post.data.tags.map((tag) => (
                   <li>
-                    <a class="tag" href={tagUrl(tag)}>{tag}</a>
+                    <a class="tag" href={tagUrl(tag)}>{tagLabel(tag)}</a>
                   </li>
                 ))}
               </ul>
