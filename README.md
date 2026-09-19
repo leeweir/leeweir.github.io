@@ -13,6 +13,7 @@
 - 文章归档、标签索引与搜索
 - Markdown 文章与代码语法高亮
 - RSS、站点地图与页面 SEO 元信息
+- 基于 giscus / GitHub Discussions 的文章评论
 
 ## 本地开发
 
@@ -107,6 +108,19 @@ description: "这篇文章的简短介绍。"
 npm run check
 npm run build
 ```
+
+## 文章评论
+
+文章页底部通过 `src/components/Comments.astro` 接入 [giscus](https://giscus.app/zh-CN)，评论保存在 `leeweir/leeweir.github.io` 仓库的 `Announcements` 分类。
+
+- 使用 GitHub 账号登录后可评论；评论内容公开，无需自建后端、数据库或配置访问 token。
+- 使用中文、浅色主题和懒加载，仅在文章页加载评论组件。
+- 按文章路径关联讨论，并开启严格匹配。修改文章文件名或路径后，需要迁移原讨论的标题及 giscus 匹配哈希，否则会关联到新的讨论。
+- 首次有人评论或回应时，giscus 自动创建对应讨论；评论可在 GitHub Discussions 中管理。
+
+启用前，仓库必须公开并开启 Discussions，同时安装 [giscus GitHub App](https://github.com/apps/giscus)，授权范围需包含该仓库。如果评论区提示 `giscus is not installed on this repository`，请在 GitHub 的 **Settings → Applications → Installed GitHub Apps → giscus → Configure** 中检查 Repository access 并保存。
+
+更换评论仓库或分类时，在 giscus 配置页获取新的仓库和分类 ID，并更新 `Comments.astro` 中的 `data-repo`、`data-repo-id`、`data-category` 与 `data-category-id`。
 
 ## 部署
 

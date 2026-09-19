@@ -1,6 +1,7 @@
 ---
 import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Comments from '../../components/Comments.astro';
 import { getPosts, postUrl, tagUrl, formatDate } from '../../lib/posts';
 import { tagLabel } from '../../lib/tags';
 export async function getStaticPaths() {
@@ -27,6 +28,7 @@ const { Content, headings } = await render(post);
         <div>{newer && <a href={postUrl(newer)}><span class="muted">← 较新一篇</span>{newer.data.title}</a>}</div>
         <div>{older && <a href={postUrl(older)}><span class="muted">较早一篇 →</span>{older.data.title}</a>}</div>
       </nav>
+      <Comments />
     </div>
     {headings.length > 0 && <details class="toc">
       <summary>文章目录</summary>
