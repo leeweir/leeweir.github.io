@@ -126,7 +126,7 @@ npm run build
 ## 访问统计
 
 所有博客页面通过 `src/components/Analytics.astro` 接入 Umami Cloud，由公共布局统一加载。
-复用游戏入口 `/cocoplayroom/` 已有的统计网站（后台名称目前为 `playroom`，域名为 `leeweir.github.io`），网站 ID 为 `b72a1b50-0b5a-4d61-a9f5-d3878d826048`。博客数据带有 `blog` 标签，无需另建统计网站，也不需要 API key。
+复用游戏入口 `/cocoplayroom/` 已有的统计网站（域名为 `leeweir.github.io`），网站 ID 为 `b72a1b50-0b5a-4d61-a9f5-d3878d826048`。博客数据带有 `blog` 标签，无需另建统计网站，也不需要 API key。后台网站名称可以修改，不影响采集。
 
 查看数据：
 
