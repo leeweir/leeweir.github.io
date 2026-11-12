@@ -1,0 +1,18 @@
+---
+// Share the existing leeweir.github.io website with /cocoplayroom/.
+// The tag keeps blog traffic separately filterable in the same dashboard.
+const enabled = import.meta.env.PROD;
+---
+
+{enabled && (
+  <script
+    is:inline
+    defer
+    src="https://cloud.umami.is/script.js"
+    data-website-id="b72a1b50-0b5a-4d61-a9f5-d3878d826048"
+    data-domains="leeweir.github.io"
+    data-tag="blog"
+    data-exclude-search="true"
+    data-exclude-hash="true"
+  ></script>
+)}

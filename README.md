@@ -14,6 +14,7 @@
 - Markdown 文章与代码语法高亮
 - RSS、站点地图与页面 SEO 元信息
 - 基于 giscus / GitHub Discussions 的文章评论
+- Umami 访问量、访客数与访问来源统计，使用 `blog` 标签区分博客流量
 
 ## 本地开发
 
@@ -121,6 +122,25 @@ npm run build
 启用前，仓库必须公开并开启 Discussions，同时安装 [giscus GitHub App](https://github.com/apps/giscus)，授权范围需包含该仓库。如果评论区提示 `giscus is not installed on this repository`，请在 GitHub 的 **Settings → Applications → Installed GitHub Apps → giscus → Configure** 中检查 Repository access 并保存。
 
 更换评论仓库或分类时，在 giscus 配置页获取新的仓库和分类 ID，并更新 `Comments.astro` 中的 `data-repo`、`data-repo-id`、`data-category` 与 `data-category-id`。
+
+## 访问统计
+
+所有博客页面通过 `src/components/Analytics.astro` 接入 Umami Cloud，由公共布局统一加载。
+复用游戏入口 `/cocoplayroom/` 已有的统计网站（后台名称目前为 `playroom`，域名为 `leeweir.github.io`），网站 ID 为 `b72a1b50-0b5a-4d61-a9f5-d3878d826048`。博客数据带有 `blog` 标签，无需另建统计网站，也不需要 API key。
+
+查看数据：
+
+1. 登录 [现有 Umami 统计后台](https://cloud.umami.is/analytics/us/websites/b72a1b50-0b5a-4d61-a9f5-d3878d826048)。
+2. 在 Overview 中添加筛选 **Tag = blog**，查看博客的 **Views（页面浏览量）**、**Visitors（访客数估算）**及 **Sources → Referrers（访问来源）**。
+3. 在 Pages 中查看各篇文章的访问情况；查看游戏入口时使用 **Path = /cocoplayroom/**。未筛选时，概览包含博客与游戏入口的合计数据。
+
+统计仅在生产构建且访问域名为 `leeweir.github.io` 时上报，本地开发和本地预览不计入数据。脚本使用 `defer`，统计服务不可用时不影响阅读和页面跳转。
+
+URL 查询参数和页面锚点不参与统计，因此不会收集站内搜索词，也不统计 UTM 参数；访问来源使用浏览器提供的 Referrer。直接访问或浏览器未提供来源时，无法识别具体来源。访客数是 Umami 的估算值，不等同于精确人数。
+
+脚本加载后自动记录页面浏览，不额外手动上报 PV。统计从发布后开始，无法补回接入前的数据。网站 ID 是公开的采集标识，统计报表仍需登录查看。
+
+参考：[接入脚本](https://docs.umami.is/docs/collect-data)、[标签筛选](https://docs.umami.is/docs/tags)、[脚本配置](https://docs.umami.is/docs/tracker-configuration)。
 
 ## 部署
 

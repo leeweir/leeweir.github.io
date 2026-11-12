@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import Analytics from '../components/Analytics.astro';
 
 interface Props {
   title?: string;
@@ -57,6 +58,7 @@ const isActive = (href: string) =>
     <meta property="og:image:alt" content="Weir" />
     {articleDate && <meta property="article:published_time" content={articleDate} />}
     <slot name="head" />
+    <Analytics />
   </head>
   <body class:list={{ 'landing-page': landing }}>
     <a class="skip-link" href="#main-content">跳至正文</a>
